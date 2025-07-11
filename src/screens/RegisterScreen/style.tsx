@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
 import colors from "../../CommonComponent/Theme/Color";
-import typography from "../../CommonComponent/Theme/Typography";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    padding: 20,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: colors.background,
   },
   title: {
@@ -15,20 +14,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
   },
-  textInput: {
+  input: {
     borderWidth: 1,
     borderColor: colors.inputBorder,
-    width: "90%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 18,
     marginBottom: 16,
-  },
-  registerLink: {
-    color: colors.link,
-    marginTop: 15,
-    textAlign: "center",
-    fontSize: 18,
   },
   button: {
     backgroundColor: colors.primary,
@@ -41,6 +33,24 @@ const styles = StyleSheet.create({
     color: colors.buttonText,
     fontSize: 18,
     fontWeight: "medium",
+  },
+  linkTextView: {
+    flexDirection: "row",
+    marginTop: 15,
+    alignSelf: "center",
+  },
+  linkText: {
+    fontSize: 18,
+  },
+  loginButton: {
+    fontSize: 18,
+    marginLeft: 10,
+    color: colors.link,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginBottom: 8,
   },
 });
 
