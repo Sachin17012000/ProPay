@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
     marginBottom: 24,
     textAlign: "center",
   },
@@ -31,25 +29,18 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.buttonText,
-    fontSize: 18,
-    fontWeight: "medium",
   },
   linkTextView: {
     flexDirection: "row",
     marginTop: 15,
     alignSelf: "center",
   },
-  linkText: {
-    fontSize: 18,
-  },
   loginButton: {
-    fontSize: 18,
     marginLeft: 10,
     color: colors.link,
   },
   error: {
     color: "red",
-    fontSize: 12,
     marginBottom: 8,
   },
 });

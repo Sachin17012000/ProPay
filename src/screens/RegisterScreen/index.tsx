@@ -1,105 +1,108 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
-  Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import styles from "./style";
-import { useNavigation } from "@react-navigation/native";
-import { useForm, Controller } from "react-hook-form";
+import Text from "../../CommonComponent/Text";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
+import { useForm } from "react-hook-form";
+import Input from "../../CommonComponent/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "./validations";
 import { useAuth } from "../../context/AuthContext";
+import { registerService } from "../../services/authService";
 
+type RegisterFormData = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 export default function RegisterScreen() {
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
+  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
   });
   const { login } = useAuth();
-  const onSubmit = (data) => {
-    console.log("User Registered:", data);
-    login();
+  const onSubmit = async (data) => {
+    setLoading(true);
+    const res = await registerService(data.name, data.email, data.password);
+    setLoading(false);
+
+    if (res.success && res.user) {
+      login(res.user);
+    } else {
+      Alert.alert("Register Failed", res.message);
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create An Account</Text>
-      <Controller
+      <Text textType="largeBold" style={styles.title}>
+        Create An Account
+      </Text>
+      <Input
+        name="fullName"
+        label="Full Name"
+        placeholder="Enter your full name"
         control={control}
-        name="name"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Full Name"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
+        error={errors.fullName?.message as string}
       />
-      {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
-      <Controller
-        control={control}
+      <Input
         name="email"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Email address"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
-      <Controller
+        label="Email"
+        placeholder="Enter your email"
+        keyboardType="email-address"
         control={control}
+        error={errors.email?.message as string}
+      />
+      <Input
         name="password"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Your Password"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry
-          />
-        )}
-      />
-      {errors.password && (
-        <Text style={styles.error}>{errors.password.message}</Text>
-      )}
-      <Controller
+        label="Password"
+        placeholder="Enter password"
+        secureTextEntry
         control={control}
-        name="confirmPassword"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Your Password"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry
-          />
-        )}
+        error={errors.password?.message as string}
       />
-      {errors.confirmPassword && (
-        <Text style={styles.error}>{errors.confirmPassword.message}</Text>
-      )}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Register</Text>
+
+      <Input
+        name="confirmPassword"
+        label="Confirm Password"
+        placeholder="Confirm your password"
+        secureTextEntry
+        control={control}
+        error={errors.confirmPassword?.message as string}
+      />
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        disabled={loading}
+        style={[styles.button, loading && { opacity: 0.6 }]}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Register</Text>
+        )}
       </TouchableOpacity>
       <View style={styles.linkTextView}>
-        <Text style={styles.linkText}>Already have an account?</Text>
+        <Text textType="mediumSemiBold">Already have an account?</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
           }}
         >
-          <Text style={styles.loginButton}>LogIn</Text>
+          <Text textType="mediumSemiBold" style={styles.loginButton}>
+            LogIn
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

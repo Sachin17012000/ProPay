@@ -1,24 +1,20 @@
 import { StyleSheet } from "react-native";
 import colors from "../../CommonComponent/Theme/Color";
-import typography from "../../CommonComponent/Theme/Typography";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: colors.background,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
     marginBottom: 24,
     textAlign: "center",
   },
   textInput: {
     borderWidth: 1,
     borderColor: colors.inputBorder,
-    width: "90%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 18,
@@ -28,7 +24,6 @@ const styles = StyleSheet.create({
     color: colors.link,
     marginTop: 15,
     textAlign: "center",
-    fontSize: 18,
   },
   button: {
     backgroundColor: colors.primary,
@@ -39,8 +34,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.buttonText,
-    fontSize: 18,
-    fontWeight: "medium",
   },
 });
 
