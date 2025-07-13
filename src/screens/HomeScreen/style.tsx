@@ -49,15 +49,38 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cardBackground,
     padding: 15,
     borderRadius: 8,
+    marginBottom: 12,
+    elevation: 2,
+  },
+
+  rowBetween: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
-    elevation: 1,
+    alignItems: "center",
+    marginBottom: 6,
   },
+
   transactionName: {
     color: colors.transactionName,
+    flex: 1,
   },
-  transactionAmount: {},
+
+  transactionAmount: {
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+
+  transactionDate: {
+    fontSize: 12,
+    color: colors.textSecondary ?? "#999",
+  },
+
+  transactionNote: {
+    fontSize: 12,
+    fontStyle: "italic",
+    color: colors.note ?? "#666",
+    marginLeft: 10,
+  },
 });
 
 export default styles;

@@ -16,6 +16,8 @@ const colors = {
   lebel: "#888",
   infoText: "#aaa",
   transactionName: "#333",
+  note: "#777",
+  danger: "red",
 };
 
 export default colors;

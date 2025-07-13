@@ -3,6 +3,7 @@ import { View, ScrollView, TouchableOpacity, Button } from "react-native";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { useAuth } from "../../context/AuthContext";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 const transactions = [
   { name: "Netflix", money: "- ₹500" },
@@ -10,11 +11,14 @@ const transactions = [
   { name: "Amazon", money: "- ₹1200" },
 ];
 export default function HomeScreen() {
-  const { logout } = useAuth();
+  const navigation = useAppNavigation();
+  const { logout, user } = useAuth();
+  console.log(user);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text textType="baseMediumBold" style={styles.greeting}>
-        Welcome back, Sachin 👋
+        Welcome back, {user.name} 👋
       </Text>
 
       <View style={styles.balanceCard}>
@@ -22,7 +26,7 @@ export default function HomeScreen() {
           Wallet Balance
         </Text>
         <Text textType="headingBold" style={styles.balanceAmount}>
-          ₹12,500.00
+          ₹{user?.balance ?? 0}
         </Text>
         <Text textType="smallRegular" style={styles.lastUpdated}>
           Updated: 10 Jul 2025
@@ -30,7 +34,10 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.actionsRow}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("AddMoney")}
+        >
           <Text textType="baseRegularBold" style={styles.actionText}>
             Add Money
           </Text>
@@ -41,18 +48,42 @@ export default function HomeScreen() {
       </View>
 
       <Text textType="mediumSemiBold" style={styles.sectionTitle}>
-        Recent Transactions
+        {user.transactions.length == 0
+          ? "Start Using App to Get Transactions"
+          : "Recent Transactions"}
       </Text>
-      {transactions.map((transaction) => (
-        <View key={transaction.name} style={styles.transactionCard}>
-          <Text textType="baseRegular" style={styles.transactionName}>
-            {transaction.name}
-          </Text>
-          <Text textType="baseRegularBold" style={styles.transactionAmount}>
-            {transaction.money}
-          </Text>
+      {user?.transactions.map((transaction) => (
+        <View key={transaction.id} style={styles.transactionCard}>
+          <View style={styles.rowBetween}>
+            <Text textType="baseRegular" style={styles.transactionName}>
+              {transaction.type === "send"
+                ? `Sent to ${transaction.to ?? "Unknown"}`
+                : `Added to Wallet`}
+            </Text>
+            <Text
+              textType="baseRegularBold"
+              style={[
+                styles.transactionAmount,
+                { color: transaction.type === "add" ? "green" : "red" },
+              ]}
+            >
+              {transaction.type === "add" ? "+ " : "- "}₹{transaction.amount}
+            </Text>
+          </View>
+
+          <View style={styles.rowBetween}>
+            <Text textType="smallRegular" style={styles.transactionDate}>
+              {transaction.date}
+            </Text>
+            {transaction.note && (
+              <Text textType="smallRegular" style={styles.transactionNote}>
+                Note: {transaction.note}
+              </Text>
+            )}
+          </View>
         </View>
       ))}
+
       <Button
         title="LogOut"
         onPress={() => {

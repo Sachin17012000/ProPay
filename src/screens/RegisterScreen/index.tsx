@@ -17,7 +17,7 @@ import { useAuth } from "../../context/AuthContext";
 import { registerService } from "../../services/authService";
 
 type RegisterFormData = {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -51,11 +51,11 @@ export default function RegisterScreen() {
         Create An Account
       </Text>
       <Input
-        name="fullName"
+        name="name"
         label="Full Name"
         placeholder="Enter your full name"
         control={control}
-        error={errors.fullName?.message as string}
+        error={errors.name?.message as string}
       />
       <Input
         name="email"
