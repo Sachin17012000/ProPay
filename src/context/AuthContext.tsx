@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Transaction } from "../types";
 
 type User = {
@@ -7,15 +8,17 @@ type User = {
   balance: number;
   transactions: Transaction[];
 };
+const STORAGE_KEY = "wallet_user";
 
 type AuthContextType = {
   isLoggedIn: boolean;
   user: User | null;
   login: (userData: User) => void;
   logout: () => void;
-  balance: number;
   addMoney: (amount: number) => void;
-  sendMoney: (to: string, amount: number) => void;
+  sendMoney: (to: string, amount: number, note?: string) => void;
+  deleteTransaction: (id: string) => void;
+  updateUser: (updates: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -23,16 +26,32 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [balance, setBalance] = useState(12500);
 
+  useEffect(() => {
+    const loadUser = async () => {
+      const storedUser = await AsyncStorage.getItem(STORAGE_KEY);
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        setUser(parsed);
+        setIsLoggedIn(true);
+      }
+    };
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    }
+  }, [user]);
   const login = (userData: User) => {
     setUser(userData);
     setIsLoggedIn(true);
   };
-  const logout = () => {
+  const logout = async () => {
     setIsLoggedIn(false);
     setUser(null);
-    setBalance(12500);
+    await AsyncStorage.removeItem(STORAGE_KEY);
   };
   const addMoney = (amount: number) => {
     setUser((prevUser) => {
@@ -54,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       };
     });
   };
-  const sendMoney = (to: string, amount: number) => {
+  const sendMoney = (to: string, amount: number, note?: string) => {
     if (!user || user.balance < amount) return;
 
     const newTransaction: Transaction = {
@@ -62,7 +81,8 @@ export const AuthProvider = ({ children }) => {
       type: "send",
       amount,
       to,
-      date: new Date().toISOString(),
+      date: new Date().toLocaleDateString(),
+      note,
     };
 
     setUser((prev) =>
@@ -75,10 +95,32 @@ export const AuthProvider = ({ children }) => {
         : prev
     );
   };
+  const deleteTransaction = (id: string) => {
+    setUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            transactions: prev.transactions.filter((t) => t.id !== id),
+          }
+        : prev
+    );
+  };
+  const updateUser = (updates: Partial<User>) => {
+    setUser((prev) => (prev ? { ...prev, ...updates } : prev));
+  };
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, user, balance, addMoney, sendMoney }}
+      value={{
+        isLoggedIn,
+        login,
+        logout,
+        user,
+        addMoney,
+        sendMoney,
+        deleteTransaction,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

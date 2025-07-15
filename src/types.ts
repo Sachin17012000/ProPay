@@ -3,6 +3,9 @@ export type RootStackParamList = {
   Register: undefined;
   Home: undefined;
   AddMoney: undefined;
+  SendMoney: undefined;
+  Transactions: undefined;
+  Profile: undefined;
 };
 export type Transaction = {
   id: string;

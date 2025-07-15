@@ -9,7 +9,7 @@ const colors = {
   inputBackground: "#f1f5f9",
   success: "#10b981",
   error: "#ef4444",
-  link: "#2563eb",
+  link: "#1e40af",
   buttonText: "#fff",
   text: "#111",
   border: "#ccc",

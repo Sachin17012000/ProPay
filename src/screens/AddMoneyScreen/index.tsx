@@ -1,13 +1,19 @@
-import React from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import Input from "../../CommonComponent/Input";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
+import Toast from "react-native-toast-message";
 
 const schema = yup.object().shape({
   amount: yup
@@ -31,12 +37,19 @@ export default function AddMoneyScreen() {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
-
+  const [loading, setLoading] = useState(false);
   const onSubmit = (data: FormData) => {
-    console.log(data);
-
-    addMoney(data.amount);
-    navigation.goBack();
+    setLoading(true);
+    setTimeout(() => {
+      addMoney(data.amount);
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Money added to your wallet",
+      });
+      setLoading(false);
+      navigation.goBack();
+    }, 2000);
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -64,10 +77,15 @@ export default function AddMoneyScreen() {
       <TouchableOpacity
         style={styles.addButton}
         onPress={handleSubmit(onSubmit)}
+        disabled={loading}
       >
-        <Text textType="baseRegularBold" style={styles.addButtonText}>
-          Add Money
-        </Text>
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text textType="baseRegularBold" style={styles.addButtonText}>
+            Add Money
+          </Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );
