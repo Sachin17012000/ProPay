@@ -1,18 +1,18 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import Text from "../../CommonComponent/Text";
 import Input from "../../CommonComponent/Input";
-import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./style";
 import { useFocusEffect } from "@react-navigation/native";
 import { loginSchema } from "./validations";
-import { loginService } from "../../services/authService";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { loginThunk } from "../../store/features/user/userThunk";
 
 const LoginScreen = ({ navigation }) => {
-  const { login } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.user);
   const {
     control,
     handleSubmit,
@@ -21,14 +21,10 @@ const LoginScreen = ({ navigation }) => {
   } = useForm({ resolver: yupResolver(loginSchema) });
 
   const onSubmit = async (data) => {
-    setLoading(true);
-    const response = await loginService(data.email, data.password);
-    setLoading(false);
-
-    if (response.success && response.user) {
-      login(response.user);
+    const result = await dispatch(loginThunk(data));
+    if (loginThunk.fulfilled.match(result)) {
     } else {
-      Alert.alert("Login Failed", response.message);
+      Alert.alert("Login Failed", result.payload || "Invalid login");
     }
   };
 

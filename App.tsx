@@ -1,12 +1,13 @@
-import { AuthProvider } from "./src/context/AuthContext";
 import RootNavigator from "./src/navigation/RootNavigator";
 import Toast from "react-native-toast-message";
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
 
 export default function App() {
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <RootNavigator />
       <Toast />
-    </AuthProvider>
+    </Provider>
   );
 }

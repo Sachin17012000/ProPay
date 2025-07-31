@@ -15,4 +15,21 @@ export type Transaction = {
   from?: string;
   date: string;
   note?: string;
+  userId: string;
+};
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  token: string;
+  balance: number;
+}
+export interface UserWithPassword extends User {
+  password: string;
+}
+export type RegisterFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 };

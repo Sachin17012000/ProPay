@@ -4,14 +4,29 @@ import { View, ScrollView, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
-import { useAuth } from "../../context/AuthContext";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { fetchTransactionsByUser } from "../../store/features/transactions/transactionThunk";
 
 export default function HomeScreen() {
+  const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
-  const { user } = useAuth();
+
+  const user = useAppSelector((state) => state.user.user);
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
+  const loading = useAppSelector((state) => state.transactions.loading);
+  const error = useAppSelector((state) => state.transactions.error);
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchTransactionsByUser(user.id));
+    }
+  }, [dispatch, user?.id]);
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -77,41 +92,49 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <Text textType="mediumSemiBold" style={styles.sectionTitle}>
-        {user.transactions.length == 0
+        {loading
+          ? "Loading transactions..."
+          : transactions.length === 0
           ? "Start Using App to Get Transactions"
           : "Recent Transactions"}
       </Text>
-      {user?.transactions.slice(0, 4).map((transaction) => (
-        <View key={transaction.id} style={styles.transactionCard}>
-          <View style={styles.rowBetween}>
-            <Text textType="baseRegular" style={styles.transactionName}>
-              {transaction.type === "send"
-                ? `Sent to ${transaction.to ?? "Unknown"}`
-                : `Added to Wallet`}
-            </Text>
-            <Text
-              textType="baseRegularBold"
-              style={[
-                styles.transactionAmount,
-                { color: transaction.type === "add" ? "green" : "red" },
-              ]}
-            >
-              {transaction.type === "add" ? "+ " : "- "}₹{transaction.amount}
-            </Text>
-          </View>
-          <View style={styles.rowBetween}>
-            <Text textType="smallRegular" style={styles.transactionDate}>
-              {transaction.date}
-            </Text>
-            {transaction.note && (
-              <Text textType="smallRegular" style={styles.transactionNote}>
-                Note: {transaction.note}
+      {error && (
+        <Text textType="mediumSemiBold" style={styles.sectionTitle}>
+          {error}
+        </Text>
+      )}
+      {!loading &&
+        transactions.slice(0, 4).map((transaction) => (
+          <View key={transaction.id} style={styles.transactionCard}>
+            <View style={styles.rowBetween}>
+              <Text textType="baseRegular" style={styles.transactionName}>
+                {transaction.type === "send"
+                  ? `Sent to ${transaction.to ?? "Unknown"}`
+                  : `Added to Wallet`}
               </Text>
-            )}
+              <Text
+                textType="baseRegularBold"
+                style={[
+                  styles.transactionAmount,
+                  { color: transaction.type === "add" ? "green" : "red" },
+                ]}
+              >
+                {transaction.type === "add" ? "+ " : "- "}₹{transaction.amount}
+              </Text>
+            </View>
+            <View style={styles.rowBetween}>
+              <Text textType="smallRegular" style={styles.transactionDate}>
+                {transaction.date}
+              </Text>
+              {transaction.note && (
+                <Text textType="smallRegular" style={styles.transactionNote}>
+                  Note: {transaction.note}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
-      ))}
-      {user?.transactions.length > 4 && (
+        ))}
+      {!loading && transactions.length > 4 && (
         <TouchableOpacity
           style={styles.viewAllButton}
           onPress={() => navigation.navigate("Transactions")}

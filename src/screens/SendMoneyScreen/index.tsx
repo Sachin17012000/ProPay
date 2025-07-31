@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -7,13 +7,17 @@ import {
   Platform,
   ActivityIndicator,
 } from "react-native";
+import uuid from "react-native-uuid";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
 import Input from "../../CommonComponent/Input";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { updateUserThunk } from "../../store/features/user/userThunk";
+import { createTransaction } from "../../store/features/transactions/transactionThunk";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 type FormData = {
   to: string;
@@ -33,27 +37,50 @@ export default function SendMoneyScreen() {
       note: "",
     },
   });
-
   const navigation = useAppNavigation();
-  const { sendMoney, user } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { user, loading } = useAppSelector((state) => state.user);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
+    if (!user) return;
     if (data.amount > user.balance) {
       Alert.alert("Insufficient Balance", "You don't have enough balance.");
       return;
     }
-    setLoading(true);
-    setTimeout(() => {
-      sendMoney(data.to, data.amount, data.note);
+    const newBalance = user.balance - data.amount;
+    try {
+      const balanceResult = await dispatch(
+        updateUserThunk({ balance: newBalance })
+      );
+      unwrapResult(balanceResult);
+      const txnResult = await dispatch(
+        createTransaction({
+          id: uuid.v4() as string,
+          userId: user.id,
+          to: data.to,
+          amount: data.amount,
+          note: data.note,
+          type: "send",
+          date: new Date().toISOString().split("T")[0],
+          from: user.name,
+        })
+      );
+      unwrapResult(txnResult);
       Toast.show({
         type: "success",
         text1: "Success",
         text2: `₹${data.amount} sent to ${data.to}`,
       });
-      setLoading(false);
       navigation.goBack();
-    }, 2000);
+    } catch (err: any) {
+      console.log(err);
+
+      Toast.show({
+        type: "error",
+        text1: "Transaction Failed",
+        text2: err?.message || "An unexpected error occurred",
+      });
+    }
   };
 
   return (

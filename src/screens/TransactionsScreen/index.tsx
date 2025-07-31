@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import {
-  ScrollView,
   View,
   TouchableOpacity,
   Alert,
   FlatList,
   RefreshControl,
 } from "react-native";
-import { useAuth } from "../../context/AuthContext";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
+import { useAppSelector } from "../../hooks/hook";
 
 type FilterType = "all" | "send" | "add";
 
 export default function TransactionsScreen() {
-  const { user, deleteTransaction } = useAuth();
   const [filter, setFilter] = useState<FilterType>("all");
   const [refreshing, setRefreshing] = useState(false);
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -24,7 +25,7 @@ export default function TransactionsScreen() {
       setRefreshing(false);
     }, 1000);
   };
-  const filteredTransactions = [...user.transactions]
+  const filteredTransactions = [...transactions]
     .filter((txn) => {
       if (filter === "all") return true;
       return txn.type === filter;
@@ -38,7 +39,7 @@ export default function TransactionsScreen() {
         text: "Delete",
         style: "destructive",
         onPress: () => {
-          deleteTransaction(id);
+          // deleteTransaction(id);
         },
       },
     ]);
@@ -91,7 +92,7 @@ export default function TransactionsScreen() {
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item: txn }) => (
             <TouchableOpacity
-              onLongPress={() => handleDelete(txn.id)}
+              // onLongPress={() => handleDelete(txn.id)}
               style={styles.transactionCard}
             >
               <View style={styles.rowBetween}>

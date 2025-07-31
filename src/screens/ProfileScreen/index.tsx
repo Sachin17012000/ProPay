@@ -5,22 +5,45 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
-import { useAuth } from "../../context/AuthContext";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import {
+  logoutThunk,
+  updateUserThunk,
+} from "../../store/features/user/userThunk";
 
 export default function ProfileScreen() {
-  const { user, logout, deleteTransaction, updateUser } = useAuth();
+  const dispatch = useAppDispatch();
+  const { loading, user } = useAppSelector((state) => state.user);
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
   const [editing, setEditing] = React.useState(false);
   const [name, setName] = React.useState(user?.name ?? "");
+
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to log out?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Logout", onPress: logout, style: "destructive" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => dispatch(logoutThunk()),
+      },
     ]);
   };
-
+  const handleSaveName = async () => {
+    if (name.trim()) {
+      const resultAction = await dispatch(updateUserThunk({ name }));
+      if (updateUserThunk.fulfilled.match(resultAction)) {
+        setEditing(false);
+      }
+    } else {
+      Alert.alert("Error", "Name cannot be empty.");
+    }
+  };
   const handleClearTransactions = () => {
     Alert.alert(
       "Delete All Transactions",
@@ -30,9 +53,7 @@ export default function ProfileScreen() {
         {
           text: "Delete All",
           style: "destructive",
-          onPress: () => {
-            user?.transactions.forEach((txn) => deleteTransaction(txn.id));
-          },
+          onPress: () => {},
         },
       ]
     );
@@ -67,20 +88,14 @@ export default function ProfileScreen() {
           <Text textType="baseRegular">{user?.name}</Text>
         )}
         {editing && (
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={() => {
-              if (name.trim()) {
-                updateUser({ name: name });
-                setEditing(false);
-              } else {
-                Alert.alert("Error", "Name cannot be empty.");
-              }
-            }}
-          >
-            <Text textType="baseRegularBold" style={styles.saveButtonText}>
-              Save Name
-            </Text>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSaveName}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text textType="baseRegularBold" style={styles.saveButtonText}>
+                Save Name
+              </Text>
+            )}
           </TouchableOpacity>
         )}
 
@@ -96,7 +111,7 @@ export default function ProfileScreen() {
         <Text textType="baseRegularBold" style={styles.label}>
           Total Transactions:
         </Text>
-        <Text textType="baseRegular">{user?.transactions?.length ?? 0}</Text>
+        <Text textType="baseRegular">{transactions?.length ?? 0}</Text>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleClearTransactions}>

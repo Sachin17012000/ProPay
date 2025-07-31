@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -13,18 +13,14 @@ import { useForm } from "react-hook-form";
 import Input from "../../CommonComponent/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "./validations";
-import { useAuth } from "../../context/AuthContext";
-import { registerService } from "../../services/authService";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { registerThunk } from "../../store/features/user/userThunk";
+import { RegisterFormData } from "../../types";
 
-type RegisterFormData = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 export default function RegisterScreen() {
+  const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
-  const [loading, setLoading] = useState(false);
+  const { loading } = useAppSelector((state) => state.user);
   const {
     control,
     handleSubmit,
@@ -32,16 +28,20 @@ export default function RegisterScreen() {
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
   });
-  const { login } = useAuth();
   const onSubmit = async (data) => {
-    setLoading(true);
-    const res = await registerService(data.name, data.email, data.password);
-    setLoading(false);
-
-    if (res.success && res.user) {
-      login(res.user);
+    const result = await dispatch(
+      registerThunk({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      })
+    );
+    if (registerThunk.fulfilled.match(result)) {
     } else {
-      Alert.alert("Register Failed", res.message);
+      Alert.alert(
+        "Registration Failed",
+        result.payload || "Something went wrong"
+      );
     }
   };
 
