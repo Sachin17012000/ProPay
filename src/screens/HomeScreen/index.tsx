@@ -77,7 +77,9 @@ export default function HomeScreen() {
         <FeatureButton
           icon="chart-line"
           label="Expense Tracker"
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate("ExpenseTracker");
+          }}
           color="#f97316"
         />
         <FeatureButton

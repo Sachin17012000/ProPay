@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Transactions: undefined;
   Profile: undefined;
   ForgotPassword: undefined;
+  ExpenseTracker: undefined;
 };
 export type Transaction = {
   id: string;

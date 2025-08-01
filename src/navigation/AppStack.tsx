@@ -8,6 +8,7 @@ import { TouchableOpacity, View, Text } from "react-native";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import { useAppSelector } from "../hooks/hook";
 import { getInitials } from "../utils/utils";
+import ExpenseTracker from "../screens/ExpenseTracker";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default function AppStack() {
       <Stack.Screen name="SendMoney" component={SendMoneyScreen} />
       <Stack.Screen name="Transactions" component={TransactionsScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="ExpenseTracker" component={ExpenseTracker} />
     </Stack.Navigator>
   );
 }
