@@ -74,6 +74,15 @@ const LoginScreen = ({ navigation }) => {
           Don’t have an account? Register
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("ForgotPassword");
+        }}
+      >
+        <Text textType="mediumSemiBold" style={styles.registerLink}>
+          Forgot Password
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -6,6 +6,7 @@ export type RootStackParamList = {
   SendMoney: undefined;
   Transactions: undefined;
   Profile: undefined;
+  ForgotPassword: undefined;
 };
 export type Transaction = {
   id: string;

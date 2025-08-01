@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../../types";
 import {
+  forgotPasswordThunk,
   loginThunk,
   logoutThunk,
   registerThunk,
@@ -12,11 +13,13 @@ interface UserState {
   user: User | null;
   loading: boolean;
   error: string | null;
+  retrievedPassword: string | null;
 }
 const initialState: UserState = {
   user: null,
   loading: false,
   error: null,
+  retrievedPassword: null,
 };
 
 const userSlice = createSlice({
@@ -26,6 +29,9 @@ const userSlice = createSlice({
     logout: (state) => {
       state.user = null;
       removeCurrentUser();
+    },
+    clearRetrievedPassword: (state) => {
+      state.retrievedPassword = null;
     },
   },
   extraReducers: (builder) => {
@@ -68,9 +74,23 @@ const userSlice = createSlice({
       .addCase(updateUserThunk.rejected, (state, action) => {
         state.error = action.payload || "Failed to update user";
         state.loading = false;
+      })
+      .addCase(forgotPasswordThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.retrievedPassword = null;
+      })
+      .addCase(forgotPasswordThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.retrievedPassword = action.payload;
+      })
+      .addCase(forgotPasswordThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to retrieve password";
+        state.retrievedPassword = null;
       });
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, clearRetrievedPassword } = userSlice.actions;
 export default userSlice.reducer;

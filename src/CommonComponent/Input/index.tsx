@@ -1,15 +1,24 @@
-import React from "react";
-import { View, TextInput, TextInputProps, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  TextInputProps,
+  StyleSheet,
+  ViewStyle,
+  TouchableOpacity,
+} from "react-native";
 import Text from "../Text";
 import { Controller, Control } from "react-hook-form";
 import colors from "../Theme/Color";
-
+import Icon from "@react-native-vector-icons/feather";
 type InputProps = TextInputProps & {
   name: string;
   control: Control<any>;
   label?: string;
   rules?: object;
   error?: string;
+  containerStyle?: ViewStyle;
+  disabled?: boolean;
 };
 
 export default function Input({
@@ -18,10 +27,15 @@ export default function Input({
   label,
   rules,
   error,
+  containerStyle,
+  disabled = false,
   ...inputProps
 }: InputProps) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = inputProps.secureTextEntry !== undefined;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {label && (
         <Text textType="smallRegular" style={styles.label}>
           {label}
@@ -33,17 +47,35 @@ export default function Input({
         name={name}
         rules={rules}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={[
-              styles.input,
-              error ? styles.inputError : null,
-              inputProps.style,
-            ]}
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            {...inputProps}
-          />
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={[
+                styles.input,
+                disabled && styles.disbaledContainer,
+                error && styles.inputError,
+                inputProps.style,
+                isPasswordField && { paddingRight: 40 },
+              ]}
+              editable={!disabled}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              {...inputProps}
+              secureTextEntry={isPasswordField && !showPassword}
+            />
+            {isPasswordField && (
+              <TouchableOpacity
+                onPress={() => setShowPassword((prev) => !prev)}
+                style={styles.iconWrapper}
+              >
+                <Icon
+                  name={showPassword ? "eye" : "eye-off"}
+                  size={20}
+                  color={colors.text}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         )}
       />
 
@@ -78,5 +110,17 @@ const styles = StyleSheet.create({
   error: {
     marginTop: 4,
     color: colors.error,
+  },
+  disbaledContainer: {
+    opacity: 0.6,
+  },
+  iconWrapper: {
+    position: "absolute",
+    right: 12,
+    top: 12,
+  },
+  inputWrapper: {
+    position: "relative",
+    justifyContent: "center",
   },
 });

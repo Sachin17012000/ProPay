@@ -19,6 +19,9 @@ interface LoginPayload {
   email: string;
   password: string;
 }
+interface ForgotPasswordPayload {
+  email: string;
+}
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -95,4 +98,17 @@ export const updateUserThunk = createAsyncThunk<
   await saveCurrentUser(updatedUser);
 
   return updatedUser;
+});
+export const forgotPasswordThunk = createAsyncThunk<
+  string,
+  ForgotPasswordPayload,
+  { rejectValue: string }
+>("user/forgotPassword", async ({ email }, { rejectWithValue }) => {
+  await delay(1000);
+  const users: UserWithPassword[] = await getRegisteredUsers();
+  const user = users.find((u) => u.email === email);
+  if (!user) {
+    return rejectWithValue("Email not found");
+  }
+  return user.password;
 });
