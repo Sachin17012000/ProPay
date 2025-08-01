@@ -46,20 +46,6 @@ export default function ProfileScreen() {
       Alert.alert("Error", "Name cannot be empty.");
     }
   };
-  const handleClearTransactions = () => {
-    Alert.alert(
-      "Delete All Transactions",
-      "Are you sure you want to delete all transaction history?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete All",
-          style: "destructive",
-          onPress: () => {},
-        },
-      ]
-    );
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -115,13 +101,6 @@ export default function ProfileScreen() {
         </Text>
         <Text textType="baseRegular">{transactions?.length ?? 0}</Text>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleClearTransactions}>
-        <Text textType="baseRegularBold" style={styles.buttonText}>
-          Delete All Transactions
-        </Text>
-      </TouchableOpacity>
-
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "red" }]}
         onPress={handleLogout}

@@ -112,6 +112,31 @@ const styles = StyleSheet.create({
     color: colors.link,
     fontWeight: "600",
   },
+  featureRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 16,
+  },
+  featureCard: {
+    flex: 1,
+    backgroundColor: "#f3f4f6",
+    padding: 16,
+    marginHorizontal: 8,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+  },
+  featureLabel: {
+    marginTop: 8,
+    color: "#111827",
+  },
+  featureGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
 });
 
 export default styles;

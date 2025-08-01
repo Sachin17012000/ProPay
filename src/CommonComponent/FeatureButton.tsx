@@ -1,0 +1,34 @@
+import React from "react";
+import { TouchableOpacity, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Text from "./Text";
+
+export function FeatureButton({ icon, label, onPress, color }) {
+  return (
+    <TouchableOpacity style={styles.featureButton} onPress={onPress}>
+      <MaterialCommunityIcons name={icon} size={28} color={color} />
+      <Text textType="baseRegularBold" style={styles.featureText}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+const styles = StyleSheet.create({
+  featureButton: {
+    width: "48%",
+    backgroundColor: "#f3f4f6",
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+    marginBottom: 12,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  featureText: {
+    marginTop: 8,
+    color: "#111827",
+  },
+});

@@ -1,14 +1,14 @@
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { fetchTransactionsByUser } from "../../store/features/transactions/transactionThunk";
-
+import { FeatureButton } from "../../CommonComponent/FeatureButton";
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
@@ -61,36 +61,33 @@ export default function HomeScreen() {
           </Text>
         </LinearGradient>
       </Animated.View>
-      <View style={styles.actionsRow}>
-        <TouchableOpacity
-          style={styles.actionButton}
+      <View style={styles.featureGrid}>
+        <FeatureButton
+          icon="wallet-plus"
+          label="Add Money"
           onPress={() => navigation.navigate("AddMoney")}
-        >
-          <MaterialCommunityIcons
-            name="wallet-plus"
-            size={20}
-            color="#fff"
-            style={styles.actionIcon}
-          />
-          <Text textType="baseRegularBold" style={styles.actionText}>
-            Add Money
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.actionButton}
+          color="#22c55e"
+        />
+        <FeatureButton
+          icon="send"
+          label="Send Money"
           onPress={() => navigation.navigate("SendMoney")}
-        >
-          <MaterialCommunityIcons
-            name="send"
-            size={20}
-            color="#fff"
-            style={styles.actionIcon}
-          />
-          <Text textType="baseRegularBold" style={styles.actionText}>
-            Send Money
-          </Text>
-        </TouchableOpacity>
+          color="#3b82f6"
+        />
+        <FeatureButton
+          icon="chart-line"
+          label="Expense Tracker"
+          onPress={() => {}}
+          color="#f97316"
+        />
+        <FeatureButton
+          icon="bank"
+          label="Market"
+          onPress={() => {}}
+          color="#a855f7"
+        />
       </View>
+
       <Text textType="mediumSemiBold" style={styles.sectionTitle}>
         {loading
           ? "Loading transactions..."
