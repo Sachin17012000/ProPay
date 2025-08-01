@@ -7,6 +7,10 @@ export default StyleSheet.create({
     backgroundColor: colors.background,
     padding: 20,
   },
+  balanceLabel: {
+    marginBottom: 12,
+    color: colors.textSecondary,
+  },
   title: {
     color: colors.textPrimary,
     marginBottom: 20,

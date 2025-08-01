@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.background,
     flexGrow: 1,
+    paddingBottom: 40,
   },
   greeting: {
     marginBottom: 20,
@@ -16,25 +17,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
   },
-
   balanceHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 6,
   },
-
   balanceLabel: {
     fontSize: 15,
     color: "#e0f2fe",
   },
-
   balanceAmount: {
     fontSize: 32,
     fontWeight: "bold",
     color: "#ffffff",
     marginBottom: 6,
   },
-
   lastUpdated: {
     fontSize: 12,
     color: "#bae6fd",

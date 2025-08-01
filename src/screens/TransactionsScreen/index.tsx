@@ -71,13 +71,11 @@ export default function TransactionsScreen() {
       <Text textType="headingBold" style={styles.title}>
         Transaction History
       </Text>
-
       <View style={styles.filterContainer}>
         {renderFilterButton("all", "All")}
         {renderFilterButton("send", "Sent")}
         {renderFilterButton("add", "Added")}
       </View>
-
       {filteredTransactions.length === 0 ? (
         <Text textType="baseRegular" style={styles.emptyMessage}>
           No {filter} transactions found.
@@ -111,7 +109,6 @@ export default function TransactionsScreen() {
                   {txn.type === "add" ? "+ " : "- "}₹{txn.amount}
                 </Text>
               </View>
-
               <View style={styles.rowBetween}>
                 <Text textType="smallRegular" style={styles.transactionDate}>
                   {txn.date}

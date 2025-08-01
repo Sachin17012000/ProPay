@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
   filterButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.border,
+    flex: 1,
   },
   filterButtonText: {
     color: colors.textPrimary,

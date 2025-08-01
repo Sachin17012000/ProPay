@@ -35,6 +35,7 @@ export default function AddMoneyScreen() {
   const dispatch = useAppDispatch();
   const { user, loading } = useAppSelector((state) => state.user);
   const navigation = useAppNavigation();
+
   const {
     control,
     handleSubmit,
@@ -42,16 +43,15 @@ export default function AddMoneyScreen() {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit = async (data: FormData) => {
     if (!user) return;
     const newBalance = user.balance + data.amount;
-
     try {
       const updateResult = await dispatch(
         updateUserThunk({ balance: newBalance })
       );
       unwrapResult(updateResult);
-
       const txnResult = await dispatch(
         createTransaction({
           id: uuid.v4() as string,
@@ -65,7 +65,6 @@ export default function AddMoneyScreen() {
         })
       );
       unwrapResult(txnResult);
-
       Toast.show({
         type: "success",
         text1: "Success",
@@ -81,16 +80,15 @@ export default function AddMoneyScreen() {
       });
     }
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text textType="headingBold" style={styles.title}>
         Add Money
       </Text>
-
       <Text textType="baseRegularBold" style={styles.balanceLabel}>
         Wallet Balance: ₹{user.balance}
       </Text>
-
       <Input
         placeholder="Enter amount"
         keyboardType="numeric"
@@ -98,12 +96,10 @@ export default function AddMoneyScreen() {
         control={control}
         error={errors.amount?.message}
       />
-
       <View style={styles.paymentMethodBox}>
         <Text textType="baseRegular">Pay via:</Text>
-        <Text textType="baseMediumBold">UPI (test mode)</Text>
+        <Text textType="baseMediumBold">Wallet Balance</Text>
       </View>
-
       <TouchableOpacity
         style={styles.addButton}
         onPress={handleSubmit(onSubmit)}

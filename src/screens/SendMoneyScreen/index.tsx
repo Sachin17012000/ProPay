@@ -74,7 +74,6 @@ export default function SendMoneyScreen() {
       navigation.goBack();
     } catch (err: any) {
       console.log(err);
-
       Toast.show({
         type: "error",
         text1: "Transaction Failed",
@@ -92,7 +91,9 @@ export default function SendMoneyScreen() {
         <Text textType="headingBold" style={styles.title}>
           Send Money
         </Text>
-
+        <Text textType="baseRegularBold" style={styles.balanceLabel}>
+          Wallet Balance: ₹{user.balance}
+        </Text>
         <Input
           name="to"
           label="Recipient"
@@ -101,7 +102,6 @@ export default function SendMoneyScreen() {
           error={errors.to?.message}
           rules={{ required: "Recipient name is required" }}
         />
-
         <Input
           name="amount"
           label="Amount"
@@ -116,7 +116,6 @@ export default function SendMoneyScreen() {
               !isNaN(Number(value)) || "Enter a valid number",
           }}
         />
-
         <Input
           name="note"
           label="Note"
@@ -124,7 +123,6 @@ export default function SendMoneyScreen() {
           control={control}
           error={errors.note?.message}
         />
-
         <TouchableOpacity
           style={styles.sendButton}
           onPress={handleSubmit(onSubmit)}

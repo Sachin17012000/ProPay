@@ -14,6 +14,7 @@ import {
   logoutThunk,
   updateUserThunk,
 } from "../../store/features/user/userThunk";
+import { getInitials } from "../../utils/utils";
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ export default function ProfileScreen() {
   const transactions = useAppSelector(
     (state) => state.transactions.transactions
   );
+
   const [editing, setEditing] = React.useState(false);
   const [name, setName] = React.useState(user?.name ?? "");
 
@@ -66,7 +68,7 @@ export default function ProfileScreen() {
       </Text>
       <View style={styles.profileCircle}>
         <Text textType="largeBold" style={styles.initials}>
-          {user?.name?.[0]?.toUpperCase() ?? "?"}
+          {getInitials(user)}
         </Text>
       </View>
 
