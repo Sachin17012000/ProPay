@@ -6,15 +6,24 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import styles from "./style";
 import Text from "../../CommonComponent/Text";
-import { useAppSelector } from "../../hooks/hook";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { updateTransaction } from "../../store/features/transactions/transactionSlice";
+import { Transaction } from "../../types";
+import CategoryModal from "../../CommonComponent/CategoryModal";
+import styles from "./style";
 
 type FilterType = "all" | "send" | "add";
 
 export default function TransactionsScreen() {
+  const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<FilterType>("all");
   const [refreshing, setRefreshing] = useState(false);
+  const [categoryModalVisible, setCategoryModalVisible] = useState(false);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    string | null
+  >(null);
+
   const transactions = useAppSelector(
     (state) => state.transactions.transactions
   );
@@ -25,24 +34,34 @@ export default function TransactionsScreen() {
       setRefreshing(false);
     }, 1000);
   };
+
   const filteredTransactions = [...transactions]
-    .filter((txn) => {
-      if (filter === "all") return true;
-      return txn.type === filter;
-    })
+    .filter((txn) => (filter === "all" ? true : txn.type === filter))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const handleDelete = (id: string) => {
-    Alert.alert("Delete", "Are you sure you want to delete this transaction?", [
-      { text: "Cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          // deleteTransaction(id);
+  const handleLongPress = (id: string, currentTracked?: boolean) => {
+    Alert.alert(
+      currentTracked ? "Remove from Expense Tracker" : "Add to Expense Tracker",
+      currentTracked
+        ? "Do you want to remove this transaction from Expense Tracker?"
+        : "Do you want to track this transaction in Expense Tracker?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: currentTracked ? "Remove" : "Add",
+          onPress: () => {
+            currentTracked
+              ? dispatch(
+                  updateTransaction({
+                    id,
+                    changes: { isTracked: !currentTracked },
+                  })
+                )
+              : (setSelectedTransactionId(id), setCategoryModalVisible(true));
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   const renderFilterButton = (type: FilterType, label: string) => (
@@ -71,11 +90,13 @@ export default function TransactionsScreen() {
       <Text textType="headingBold" style={styles.title}>
         Transaction History
       </Text>
+
       <View style={styles.filterContainer}>
         {renderFilterButton("all", "All")}
         {renderFilterButton("send", "Sent")}
         {renderFilterButton("add", "Added")}
       </View>
+
       {filteredTransactions.length === 0 ? (
         <Text textType="baseRegular" style={styles.emptyMessage}>
           No {filter} transactions found.
@@ -90,11 +111,18 @@ export default function TransactionsScreen() {
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item: txn }) => (
             <TouchableOpacity
-              // onLongPress={() => handleDelete(txn.id)}
-              style={styles.transactionCard}
+              onLongPress={() =>
+                handleLongPress(txn.id, (txn as Transaction).isTracked)
+              }
+              style={[
+                styles.transactionCard,
+                (txn as Transaction).isTracked && {
+                  backgroundColor: "#E6F9EC",
+                },
+              ]}
             >
               <View style={styles.rowBetween}>
-                <Text textType="baseRegular" style={styles.transactionName}>
+                <Text textType="baseRegularBold" style={styles.transactionName}>
                   {txn.type === "send"
                     ? `Sent to ${txn.to ?? "Unknown"}`
                     : "Added to Wallet"}
@@ -103,19 +131,30 @@ export default function TransactionsScreen() {
                   textType="baseRegularBold"
                   style={[
                     styles.transactionAmount,
-                    { color: txn.type === "add" ? "green" : "red" },
+                    { color: txn.type === "add" ? "#2E8B57" : "#D9534F" },
                   ]}
                 >
                   {txn.type === "add" ? "+ " : "- "}₹{txn.amount}
                 </Text>
               </View>
+
               <View style={styles.rowBetween}>
-                <Text textType="smallRegular" style={styles.transactionDate}>
-                  {txn.date}
-                </Text>
+                <View style={styles.dateCategoryView}>
+                  <Text textType="smallRegular" style={styles.transactionDate}>
+                    {txn.date}
+                  </Text>
+                  {/* {txn.category && (
+                    <Text
+                      textType="smallRegular"
+                      style={styles.transactionCategory}
+                    >
+                      Category: {txn.category}
+                    </Text>
+                  )} */}
+                </View>
                 {txn.note && (
                   <Text textType="smallRegular" style={styles.transactionNote}>
-                    Note: {txn.note}
+                    {txn.note}
                   </Text>
                 )}
               </View>
@@ -123,6 +162,22 @@ export default function TransactionsScreen() {
           )}
         />
       )}
+
+      <CategoryModal
+        visible={categoryModalVisible}
+        onClose={() => setCategoryModalVisible(false)}
+        onSelect={(category) => {
+          if (selectedTransactionId) {
+            dispatch(
+              updateTransaction({
+                id: selectedTransactionId,
+                changes: { isTracked: true, category },
+              })
+            );
+          }
+          setSelectedTransactionId(null);
+        }}
+      />
     </View>
   );
 }

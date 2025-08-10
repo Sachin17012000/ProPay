@@ -2,7 +2,7 @@ const colors = {
   primary: "#1e40af",
   secondary: "#f59e0b",
   background: "#ffffff",
-  cardBackground: "#f9f9f9",
+  cardBackground: "#eeeaeaff",
   textPrimary: "#0f172a",
   textSecondary: "#64748b",
   inputBorder: "#cbd5e1",

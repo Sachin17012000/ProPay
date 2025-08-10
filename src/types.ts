@@ -18,6 +18,8 @@ export type Transaction = {
   date: string;
   note?: string;
   userId: string;
+  isTracked?: boolean;
+  category?: string;
 };
 export interface User {
   id: string;

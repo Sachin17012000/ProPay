@@ -17,7 +17,26 @@ const initialState: TransactionState = {
 const transactionSlice = createSlice({
   name: "transactions",
   initialState,
-  reducers: {},
+  reducers: {
+    updateTransaction: (state, action) => {
+      const { id, changes } = action.payload;
+      const index = state.transactions.findIndex((txn) => txn.id === id);
+      if (index !== -1) {
+        state.transactions[index] = {
+          ...state.transactions[index],
+          ...changes,
+        };
+      }
+    },
+    toggleExpenseTracking: (state, action) => {
+      const id = action.payload;
+      const index = state.transactions.findIndex((txn) => txn.id === id);
+      if (index !== -1) {
+        state.transactions[index].isTracked =
+          !state.transactions[index].isTracked;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTransactionsByUser.pending, (state) => {
@@ -41,5 +60,6 @@ const transactionSlice = createSlice({
       });
   },
 });
-
+export const { updateTransaction, toggleExpenseTracking } =
+  transactionSlice.actions;
 export default transactionSlice.reducer;

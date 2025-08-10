@@ -23,3 +23,27 @@ export const getInitials = (user: User) => {
       : words[0]?.[0]?.toUpperCase() || "?";
   return initials;
 };
+export const getCategoryIcon = (category: string) => {
+  switch (category.toLowerCase()) {
+    case "food":
+      return "food";
+    case "travel":
+      return "car";
+    case "shopping":
+      return "cart";
+    case "rent":
+      return "home";
+    case "bills":
+      return "file-document";
+    case "entertainment":
+      return "movie";
+    case "health":
+      return "heart-pulse";
+    default:
+      return "dots-horizontal";
+  }
+};
+export const normalizeDate = (date: Date) => {
+  date.setHours(0, 0, 0, 0);
+  return date;
+};

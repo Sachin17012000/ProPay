@@ -1,0 +1,122 @@
+import { StyleSheet } from "react-native";
+import colors from "../Theme/Color";
+
+export default StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end",
+  },
+  container: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 14,
+    color: "#222",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginVertical: 8,
+    fontSize: 16,
+    backgroundColor: "#fafafa",
+  },
+  switchRow: {
+    flexDirection: "row",
+    marginBottom: 14,
+    borderRadius: 8,
+    backgroundColor: "#f2f2f2",
+    overflow: "hidden",
+  },
+  switchBtn: {
+    flex: 1,
+    padding: 12,
+    alignItems: "center",
+  },
+  active: {
+    backgroundColor: "#4CAF50",
+  },
+  activeText: { color: "#fff", fontWeight: "600" },
+  inactiveText: { color: "#555" },
+
+  dateText: {
+    color: "#333",
+    marginVertical: 12,
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#f7f7f7",
+    borderRadius: 8,
+  },
+
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+    gap: 10,
+  },
+  cancel: {
+    flex: 1,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  cancelText: { color: "#777", fontWeight: "500" },
+  save: {
+    flex: 1,
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  saveText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+
+  categoryChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginRight: 10,
+    marginVertical: 12,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  selectedCategoryChip: {
+    backgroundColor: "#007AFF",
+    borderColor: "#007AFF",
+  },
+  categoryChipText: {
+    marginLeft: 6,
+    color: "#333",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  label: {
+    marginTop: 16,
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#444",
+  },
+});
