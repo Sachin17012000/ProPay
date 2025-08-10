@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Modal,
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   Platform,
@@ -17,6 +16,8 @@ import { Transaction } from "../../types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { categories } from "../../utils/staticData";
 import { useAppSelector } from "../../hooks/hook";
+import colors from "../Theme/Color";
+import Text from "../Text";
 
 type Props = {
   visible: boolean;
@@ -29,7 +30,7 @@ export const AddExpenseModal: React.FC<Props> = ({
   onClose,
   onSave,
 }) => {
-  const { user, loading } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.user);
   const [type, setType] = useState<"send" | "add">("send");
   const [amount, setAmount] = useState("");
   const [to, setTo] = useState("");
@@ -53,7 +54,6 @@ export const AddExpenseModal: React.FC<Props> = ({
     if (!amount || isNaN(Number(amount))) {
       return alert("Please enter a valid amount");
     }
-
     const newTxn: Transaction = {
       id: uuid.v4() as string,
       type,
@@ -65,7 +65,6 @@ export const AddExpenseModal: React.FC<Props> = ({
       userId: user.id,
       category,
     };
-
     onSave(newTxn);
     reset();
     onClose();
@@ -75,15 +74,15 @@ export const AddExpenseModal: React.FC<Props> = ({
     <Modal visible={visible} animationType="slide" transparent>
       <TouchableWithoutFeedback
         onPress={() => {
-          Keyboard.dismiss(); // hide keyboard if open
+          Keyboard.dismiss();
           onClose();
         }}
       >
         <View style={styles.overlay}>
           <View style={styles.container}>
-            <Text style={styles.header}>Add Expense</Text>
-
-            {/* Type Switch */}
+            <Text textType="largeBold" style={styles.header}>
+              Add Expense
+            </Text>
             <View style={styles.switchRow}>
               <TouchableOpacity
                 onPress={() => setType("send")}
@@ -133,17 +132,15 @@ export const AddExpenseModal: React.FC<Props> = ({
                 onChangeText={setFrom}
               />
             )}
-
-            {/* Note */}
             <TextInput
               placeholder="Note (optional)"
               style={styles.input}
               value={note}
               onChangeText={setNote}
             />
-
-            {/* Category Selector */}
-            <Text style={styles.label}>Select Category</Text>
+            <Text textType="semiRegular" style={styles.label}>
+              Select Category
+            </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {categories.map((cat) => (
                 <TouchableOpacity
@@ -157,12 +154,13 @@ export const AddExpenseModal: React.FC<Props> = ({
                   <MaterialCommunityIcons
                     name="tag-outline"
                     size={16}
-                    color={category === cat ? "#fff" : "#333"}
+                    color={category === cat ? colors.ivory : colors.granite}
                   />
                   <Text
+                    textType="semiRegular"
                     style={[
                       styles.categoryChipText,
-                      category === cat && { color: "#fff" },
+                      category === cat && { color: colors.ivory },
                     ]}
                   >
                     {cat}
@@ -170,10 +168,10 @@ export const AddExpenseModal: React.FC<Props> = ({
                 </TouchableOpacity>
               ))}
             </ScrollView>
-
-            {/* Date Picker */}
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.dateText}>📅 {date.toDateString()}</Text>
+              <Text textType="baseRegular" style={styles.dateText}>
+                📅 {date.toDateString()}
+              </Text>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
@@ -186,14 +184,14 @@ export const AddExpenseModal: React.FC<Props> = ({
                 }}
               />
             )}
-
-            {/* Actions */}
             <View style={styles.buttonRow}>
               <TouchableOpacity onPress={onClose} style={styles.cancel}>
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleSave} style={styles.save}>
-                <Text style={styles.saveText}>Save</Text>
+                <Text textType="baseRegularBold" style={styles.saveText}>
+                  Save
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { BaseToast, ErrorToast } from "react-native-toast-message";
+import colors from "./Theme/Color";
 
 export const toastConfig = {
   success: (props: any) => (
@@ -23,25 +24,25 @@ export const toastConfig = {
 const styles = StyleSheet.create({
   successToast: {
     borderLeftColor: "green",
-    backgroundColor: "#e6ffed",
+    backgroundColor: colors.lightWhite,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#b3f0c6",
+    borderColor: colors.lightGreen,
   },
   errorToast: {
     borderLeftColor: "red",
-    backgroundColor: "#ffe6e6",
+    backgroundColor: colors.lightPink,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#f0b3b3",
+    borderColor: colors.pink,
   },
   text1: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
+    color: colors.lightShadowBlack,
   },
   text2: {
     fontSize: 18,
-    color: "#333",
+    color: colors.granite,
   },
 });

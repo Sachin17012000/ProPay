@@ -4,7 +4,7 @@ import colors from "../../CommonComponent/Theme/Color";
 export default StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     padding: 20,
   },
   headerView: {
@@ -14,12 +14,11 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 20,
-    color: colors.textPrimary,
+    color: colors.black,
   },
   filterIconStyle: {
     padding: 8,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.orange,
     borderRadius: 8,
   },
   expenseSummaryHeader: {
@@ -27,71 +26,70 @@ export default StyleSheet.create({
   },
   chartBarIconStyle: {
     padding: 2,
-    backgroundColor: colors.success,
+    backgroundColor: colors.emerald,
     borderRadius: 4,
     marginRight: 8,
   },
   toggleSection: {
     flexDirection: "row",
     marginTop: 20,
-    borderColor: colors.border,
+    borderColor: colors.ash,
     borderWidth: 1,
     borderRadius: 10,
     overflow: "hidden",
   },
   toggleTitle: {
     flex: 1,
-    borderColor: colors.border,
+    borderColor: colors.ash,
     alignItems: "center",
     paddingVertical: 5,
   },
   activeToggle: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     borderRadius: 10,
   },
   toggleButtonText: {
-    color: colors.textPrimary,
+    color: colors.black,
   },
   activeToggleButtonText: {
-    color: colors.buttonText,
+    color: colors.ivory,
   },
   summarySection: {
     marginTop: 20,
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     borderRadius: 10,
     padding: 15,
   },
   summaryLine: {
-    color: colors.textPrimary,
+    color: colors.black,
     marginBottom: 5,
   },
   progressBarBackground: {
     height: 10,
     borderRadius: 5,
-    backgroundColor: colors.inputBorder,
+    backgroundColor: colors.silver,
     marginTop: 10,
     overflow: "hidden",
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     borderRadius: 5,
   },
   percentUsedText: {
     marginTop: 5,
-    color: colors.textSecondary,
+    color: colors.grey,
   },
   categoryTitle: {
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 16,
-    color: colors.textPrimary,
+    color: colors.black,
   },
   categoryScrollView: {
     gap: 12,
   },
   categoryCard: {
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     padding: 12,
     borderRadius: 10,
     width: 110,
@@ -100,66 +98,57 @@ export default StyleSheet.create({
     marginRight: 10,
   },
   categoryText: {
-    color: colors.textPrimary,
+    color: colors.black,
     marginBottom: 4,
   },
   categoryAmount: {
-    color: colors.textSecondary,
+    color: colors.grey,
   },
-
   transactionTitle: {
-    fontSize: 16,
     marginTop: 24,
     marginBottom: 8,
-    color: colors.textPrimary,
+    color: colors.black,
   },
-
   transactionList: {
     paddingBottom: 60,
   },
-
   transactionItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 12,
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     borderRadius: 10,
     marginBottom: 8,
-    shadowColor: "#000",
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
   },
-
   transactionInfo: {
     flexDirection: "column",
   },
-
   emptyState: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 40,
   },
-
   emptyText: {
     marginTop: 10,
-    fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.grey,
   },
-
   fabButton: {
     position: "absolute",
     bottom: 30,
     right: 20,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     borderRadius: 30,
     width: 60,
     height: 60,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -170,7 +159,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     alignSelf: "flex-start",
   },
 });

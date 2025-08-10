@@ -4,7 +4,7 @@ import colors from "../../CommonComponent/Theme/Color";
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     flexGrow: 1,
     paddingBottom: 40,
   },
@@ -23,18 +23,14 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   balanceLabel: {
-    fontSize: 15,
-    color: "#e0f2fe",
+    color: colors.balancedWhite,
   },
   balanceAmount: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#ffffff",
+    color: colors.white,
     marginBottom: 6,
   },
   lastUpdated: {
-    fontSize: 12,
-    color: "#bae6fd",
+    color: colors.offBlue,
   },
   actionsRow: {
     flexDirection: "row",
@@ -46,11 +42,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     paddingVertical: 12,
     borderRadius: 12,
     marginHorizontal: 6,
-    shadowColor: "#000",
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -59,21 +55,17 @@ const styles = StyleSheet.create({
   actionIcon: {
     marginRight: 8,
   },
-  actionText: {
-    color: colors.buttonText,
-    fontSize: 16,
-  },
   sectionTitle: {
     marginBottom: 10,
   },
   transactionCard: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.snowWhite,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     elevation: 2,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.coolGrey,
   },
   rowBetween: {
     flexDirection: "row",
@@ -82,35 +74,31 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   transactionName: {
-    color: colors.transactionName,
+    color: colors.granite,
     flex: 1,
   },
   transactionAmount: {
-    fontWeight: "bold",
     marginLeft: 8,
   },
   transactionDate: {
-    fontSize: 12,
-    color: colors.textSecondary ?? "#999",
+    color: colors.grey ?? colors.neutralGray,
   },
   transactionNote: {
-    fontSize: 12,
     fontStyle: "italic",
-    color: colors.note ?? "#666",
+    color: colors.noteGrey ?? colors.charcoalGray,
     marginLeft: 10,
   },
   viewAllButton: {
     marginTop: 12,
     marginBottom: 24,
     alignSelf: "center",
-    backgroundColor: "#e0f2fe",
+    backgroundColor: colors.balancedWhite,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
   },
   viewAllButtonText: {
-    color: colors.link,
-    fontWeight: "600",
+    color: colors.royalBlue,
   },
   featureRow: {
     flexDirection: "row",
@@ -119,7 +107,7 @@ const styles = StyleSheet.create({
   },
   featureCard: {
     flex: 1,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.lightOffWhite,
     padding: 16,
     marginHorizontal: 8,
     borderRadius: 16,
@@ -129,7 +117,7 @@ const styles = StyleSheet.create({
   },
   featureLabel: {
     marginTop: 8,
-    color: "#111827",
+    color: colors.lightBlack,
   },
   featureGrid: {
     flexDirection: "row",

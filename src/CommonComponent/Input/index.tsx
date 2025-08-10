@@ -11,6 +11,7 @@ import Text from "../Text";
 import { Controller, Control } from "react-hook-form";
 import colors from "../Theme/Color";
 import Icon from "@react-native-vector-icons/feather";
+
 type InputProps = TextInputProps & {
   name: string;
   control: Control<any>;
@@ -41,7 +42,6 @@ export default function Input({
           {label}
         </Text>
       )}
-
       <Controller
         control={control}
         name={name}
@@ -71,14 +71,13 @@ export default function Input({
                 <Icon
                   name={showPassword ? "eye" : "eye-off"}
                   size={20}
-                  color={colors.text}
+                  color={colors.onyx}
                 />
               </TouchableOpacity>
             )}
           </View>
         )}
       />
-
       {error && (
         <Text textType="smallRegular" style={styles.error}>
           {error}
@@ -94,22 +93,22 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 4,
-    color: colors.text,
+    color: colors.onyx,
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.ash,
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
-    color: colors.text,
+    color: colors.onyx,
   },
   inputError: {
-    borderColor: colors.error,
+    borderColor: colors.crimson,
   },
   error: {
     marginTop: 4,
-    color: colors.error,
+    color: colors.crimson,
   },
   disbaledContainer: {
     opacity: 0.6,

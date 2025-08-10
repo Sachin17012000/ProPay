@@ -5,15 +5,14 @@ export default StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
   title: {
-    fontSize: 28,
     marginBottom: 20,
-    color: colors.textPrimary,
+    color: colors.black,
   },
   card: {
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     padding: 16,
     borderRadius: 10,
     marginBottom: 20,
@@ -23,45 +22,42 @@ export default StyleSheet.create({
     marginTop: 12,
   },
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     padding: 12,
     borderRadius: 8,
     marginTop: 10,
     alignItems: "center",
   },
   buttonText: {
-    color: "#fff",
+    color: colors.ivory,
   },
   profileCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: "#1e40af",
+    backgroundColor: colors.blue,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
     marginBottom: 20,
   },
   initials: {
-    color: "#fff",
-    fontSize: 28,
+    color: colors.ivory,
   },
   rowBetween: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.ash,
     borderRadius: 8,
     padding: 10,
     marginVertical: 10,
   },
-
   saveButton: {
-    backgroundColor: "#1e40af",
+    backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
@@ -69,10 +65,10 @@ export default StyleSheet.create({
   },
 
   saveButtonText: {
-    color: "#fff",
+    color: colors.ivory,
   },
 
   link: {
-    color: "#2563eb",
+    color: colors.blue,
   },
 });

@@ -6,14 +6,14 @@ const style = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 280,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
   headingStyle: {
     alignSelf: "center",
     paddingBottom: 10,
   },
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
@@ -28,35 +28,33 @@ const style = StyleSheet.create({
     marginTop: 5,
   },
   buttonText: {
-    color: colors.buttonText,
+    color: colors.ivory,
   },
   passwordInfoText: {
     paddingTop: 10,
-    color: colors.success,
+    color: colors.emerald,
     alignSelf: "center",
   },
   registerLink: {
-    color: colors.link,
+    color: colors.royalBlue,
     marginTop: 15,
     textAlign: "center",
   },
   passwordBox: {
-    backgroundColor: "#F0F4FF",
+    backgroundColor: colors.paleBlue,
     padding: 16,
     borderRadius: 10,
     marginTop: 20,
     borderWidth: 1,
-    borderColor: "#AAB2C8",
-    shadowColor: "#000",
+    borderColor: colors.dustyBlue,
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
   },
-
   passwordText: {
-    color: "#333",
-    fontSize: 16,
+    color: colors.granite,
   },
 });
 export default style;

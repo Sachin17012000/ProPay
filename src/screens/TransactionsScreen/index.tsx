@@ -12,21 +12,22 @@ import { updateTransaction } from "../../store/features/transactions/transaction
 import { Transaction } from "../../types";
 import CategoryModal from "../../CommonComponent/CategoryModal";
 import styles from "./style";
+import colors from "../../CommonComponent/Theme/Color";
 
 type FilterType = "all" | "send" | "add";
 
 export default function TransactionsScreen() {
   const dispatch = useAppDispatch();
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
+
   const [filter, setFilter] = useState<FilterType>("all");
   const [refreshing, setRefreshing] = useState(false);
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [selectedTransactionId, setSelectedTransactionId] = useState<
     string | null
   >(null);
-
-  const transactions = useAppSelector(
-    (state) => state.transactions.transactions
-  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -90,13 +91,11 @@ export default function TransactionsScreen() {
       <Text textType="headingBold" style={styles.title}>
         Transaction History
       </Text>
-
       <View style={styles.filterContainer}>
         {renderFilterButton("all", "All")}
         {renderFilterButton("send", "Sent")}
         {renderFilterButton("add", "Added")}
       </View>
-
       {filteredTransactions.length === 0 ? (
         <Text textType="baseRegular" style={styles.emptyMessage}>
           No {filter} transactions found.
@@ -117,7 +116,7 @@ export default function TransactionsScreen() {
               style={[
                 styles.transactionCard,
                 (txn as Transaction).isTracked && {
-                  backgroundColor: "#E6F9EC",
+                  backgroundColor: colors.mintMist,
                 },
               ]}
             >
@@ -131,7 +130,10 @@ export default function TransactionsScreen() {
                   textType="baseRegularBold"
                   style={[
                     styles.transactionAmount,
-                    { color: txn.type === "add" ? "#2E8B57" : "#D9534F" },
+                    {
+                      color:
+                        txn.type === "add" ? colors.emerald : colors.crimson,
+                    },
                   ]}
                 >
                   {txn.type === "add" ? "+ " : "- "}₹{txn.amount}
@@ -143,14 +145,6 @@ export default function TransactionsScreen() {
                   <Text textType="smallRegular" style={styles.transactionDate}>
                     {txn.date}
                   </Text>
-                  {/* {txn.category && (
-                    <Text
-                      textType="smallRegular"
-                      style={styles.transactionCategory}
-                    >
-                      Category: {txn.category}
-                    </Text>
-                  )} */}
                 </View>
                 {txn.note && (
                   <Text textType="smallRegular" style={styles.transactionNote}>
@@ -162,7 +156,6 @@ export default function TransactionsScreen() {
           )}
         />
       )}
-
       <CategoryModal
         visible={categoryModalVisible}
         onClose={() => setCategoryModalVisible(false)}

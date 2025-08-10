@@ -1,5 +1,3 @@
-// utils/asyncStorageUtils.ts
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User, UserWithPassword, Transaction } from "../types";
 

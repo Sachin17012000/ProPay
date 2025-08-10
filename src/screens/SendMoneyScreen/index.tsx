@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { updateUserThunk } from "../../store/features/user/userThunk";
 import { createTransaction } from "../../store/features/transactions/transactionThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
+import colors from "../../CommonComponent/Theme/Color";
 
 type FormData = {
   to: string;
@@ -26,6 +27,11 @@ type FormData = {
 };
 
 export default function SendMoneyScreen() {
+  const navigation = useAppNavigation();
+  const dispatch = useAppDispatch();
+
+  const { user, loading } = useAppSelector((state) => state.user);
+
   const {
     control,
     handleSubmit,
@@ -37,9 +43,6 @@ export default function SendMoneyScreen() {
       note: "",
     },
   });
-  const navigation = useAppNavigation();
-  const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.user);
 
   const onSubmit = async (data: FormData) => {
     if (!user) return;
@@ -129,7 +132,7 @@ export default function SendMoneyScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.ivory} />
           ) : (
             <Text textType="baseRegularBold" style={styles.sendButtonText}>
               Send Money

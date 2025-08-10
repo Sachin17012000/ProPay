@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "center",
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
   title: {
     marginBottom: 24,
@@ -14,26 +14,26 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderWidth: 1,
-    borderColor: colors.inputBorder,
+    borderColor: colors.silver,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 18,
     marginBottom: 16,
   },
   registerLink: {
-    color: colors.link,
+    color: colors.royalBlue,
     marginTop: 15,
     textAlign: "center",
   },
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 5,
   },
   buttonText: {
-    color: colors.buttonText,
+    color: colors.ivory,
   },
 });
 

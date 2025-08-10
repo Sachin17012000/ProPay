@@ -5,31 +5,31 @@ export default StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: colors.ivory,
   },
   title: {
     marginBottom: 16,
   },
   balanceLabel: {
     marginBottom: 12,
-    color: colors.textSecondary,
+    color: colors.grey,
   },
   input: {
     marginBottom: 20,
   },
   paymentMethodBox: {
     padding: 12,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.softGray,
     borderRadius: 8,
     marginBottom: 20,
   },
   addButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
   },
   addButtonText: {
-    color: colors.buttonText,
+    color: colors.ivory,
   },
 });

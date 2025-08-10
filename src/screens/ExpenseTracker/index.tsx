@@ -22,15 +22,17 @@ const toggleArray = [
 
 export default function ExpenseTracker() {
   const dispatch = useAppDispatch();
+
   const realTransactions = useAppSelector(
     (state: RootState) => state.transactions.transactions
   ).filter((txn) => txn.isTracked);
-
   const manualExpenses = useAppSelector(
     (state: RootState) => state.expenses.expenses
   );
   const budgets = useAppSelector((state: RootState) => state.expenses.budgets);
+
   const allExpenses = [...realTransactions, ...manualExpenses];
+
   const [activeTab, setActiveTab] = useState("Monthly");
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -44,6 +46,7 @@ export default function ExpenseTracker() {
   const [monthly, setMonthly] = useState(
     budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? ""
   );
+
   const getDateFilteredExpenses = () => {
     const now = new Date();
     return allExpenses.filter((txn) => {
@@ -93,7 +96,6 @@ export default function ExpenseTracker() {
   };
   const categoryTotals = useMemo(() => {
     const map: Record<string, number> = {};
-
     getDateFilteredExpenses().forEach((txn) => {
       const cat = txn.category || "Others";
       if (!map[cat]) map[cat] = 0;
@@ -127,7 +129,6 @@ export default function ExpenseTracker() {
             Expense Tracker
           </Text>
         </View>
-
         <View style={styles.expenseSummaryHeader}>
           <MaterialCommunityIcons
             name="chart-bar"
@@ -138,7 +139,6 @@ export default function ExpenseTracker() {
             This {getToggleTitle()}
           </Text>
         </View>
-
         <View style={styles.toggleSection}>
           {toggleArray.map((toggle) => (
             <TouchableOpacity
@@ -161,7 +161,6 @@ export default function ExpenseTracker() {
             </TouchableOpacity>
           ))}
         </View>
-
         <View style={styles.summarySection}>
           <Text textType="semiRegular" style={styles.summaryLine}>
             Total Spent: ₹{totalSpent}
@@ -172,7 +171,6 @@ export default function ExpenseTracker() {
           <Text textType="semiRegular" style={styles.summaryLine}>
             Remaining: ₹{selectedBudget - totalSpent}
           </Text>
-
           <View style={styles.progressBarBackground}>
             <View
               style={[styles.progressBarFill, { width: `${percentUsed}%` }]}
@@ -188,13 +186,11 @@ export default function ExpenseTracker() {
             <Text style={{ color: "white" }}>Set Budget</Text>
           </TouchableOpacity>
         </View>
-
         {categoryTotals.length > 0 && (
           <View>
             <Text textType="mediumSemiBold" style={styles.categoryTitle}>
               Category Breakdown
             </Text>
-
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -207,11 +203,10 @@ export default function ExpenseTracker() {
                   style={[
                     styles.categoryCard,
                     selectedCategory === category.name && {
-                      backgroundColor: colors.primary + "20",
-                    }, // highlight selected
+                      backgroundColor: colors.blue + "20",
+                    },
                   ]}
                   onPress={() => {
-                    // toggle selection
                     setSelectedCategory((prev) =>
                       prev === category.name ? null : category.name
                     );
@@ -220,7 +215,7 @@ export default function ExpenseTracker() {
                   <MaterialCommunityIcons
                     name={category.icon as any}
                     size={24}
-                    color={colors.primary}
+                    color={colors.blue}
                     style={{ marginBottom: 4 }}
                   />
                   <Text textType="baseSemiBold" style={styles.categoryText}>
@@ -237,13 +232,12 @@ export default function ExpenseTracker() {
         <Text textType="mediumSemiBold" style={styles.transactionTitle}>
           Recent Transactions
         </Text>
-
         {filteredExpenses.length === 0 ? (
           <View style={styles.emptyState}>
             <MaterialCommunityIcons
               name="file-document-outline"
               size={50}
-              color="#ccc"
+              color={colors.ash}
             />
             <Text textType="baseRegular" style={styles.emptyText}>
               No transactions yet. Tap + to add one!
@@ -257,7 +251,10 @@ export default function ExpenseTracker() {
                   <Text textType="baseSemiBold">
                     {item.category || "Uncategorized"}
                   </Text>
-                  <Text textType="smallRegular" style={{ color: "#777" }}>
+                  <Text
+                    textType="smallRegular"
+                    style={{ color: colors.noteGrey }}
+                  >
                     {item.date} • {item.note?.trim() ? item.note : "(No Note)"}{" "}
                     {item.type === "send"
                       ? item.to?.trim()
@@ -279,7 +276,6 @@ export default function ExpenseTracker() {
           </View>
         )}
       </ScrollView>
-
       <AddExpenseModal
         visible={showAddModal}
         onClose={() => setShowAddModal(false)}
@@ -302,7 +298,7 @@ export default function ExpenseTracker() {
         style={styles.fabButton}
         onPress={() => setShowAddModal(true)}
       >
-        <MaterialCommunityIcons name="plus" size={26} color="#fff" />
+        <MaterialCommunityIcons name="plus" size={26} color={colors.ivory} />
       </TouchableOpacity>
     </View>
   );

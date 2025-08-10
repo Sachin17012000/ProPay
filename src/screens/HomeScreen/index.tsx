@@ -1,7 +1,6 @@
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -9,6 +8,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { fetchTransactionsByUser } from "../../store/features/transactions/transactionThunk";
 import { FeatureButton } from "../../CommonComponent/FeatureButton";
+import colors from "../../CommonComponent/Theme/Color";
+
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
@@ -45,7 +46,7 @@ export default function HomeScreen() {
         style={{ borderRadius: 20, marginBottom: 24, overflow: "hidden" }}
       >
         <LinearGradient
-          colors={["#3b82f6", "#10b981"]}
+          colors={[colors.steelBlue, colors.emerald]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.balanceCard}
@@ -66,13 +67,13 @@ export default function HomeScreen() {
           icon="wallet-plus"
           label="Add Money"
           onPress={() => navigation.navigate("AddMoney")}
-          color="#22c55e"
+          color={colors.lightGreen}
         />
         <FeatureButton
           icon="send"
           label="Send Money"
           onPress={() => navigation.navigate("SendMoney")}
-          color="#3b82f6"
+          color={colors.steelBlue}
         />
         <FeatureButton
           icon="chart-line"
@@ -80,16 +81,15 @@ export default function HomeScreen() {
           onPress={() => {
             navigation.navigate("ExpenseTracker");
           }}
-          color="#f97316"
+          color={colors.orange}
         />
         <FeatureButton
           icon="bank"
           label="Market"
           onPress={() => {}}
-          color="#a855f7"
+          color={colors.purple}
         />
       </View>
-
       <Text textType="mediumSemiBold" style={styles.sectionTitle}>
         {loading
           ? "Loading transactions..."
@@ -115,7 +115,12 @@ export default function HomeScreen() {
                 textType="baseRegularBold"
                 style={[
                   styles.transactionAmount,
-                  { color: transaction.type === "add" ? "green" : "red" },
+                  {
+                    color:
+                      transaction.type === "add"
+                        ? colors.emerald
+                        : colors.dangerRed,
+                  },
                 ]}
               >
                 {transaction.type === "add" ? "+ " : "- "}₹{transaction.amount}

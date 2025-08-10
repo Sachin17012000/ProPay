@@ -12,7 +12,9 @@ import { loginThunk } from "../../store/features/user/userThunk";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
+
   const { loading } = useAppSelector((state) => state.user);
+
   const {
     control,
     handleSubmit,

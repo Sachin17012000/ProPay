@@ -23,6 +23,7 @@ export const getInitials = (user: User) => {
       : words[0]?.[0]?.toUpperCase() || "?";
   return initials;
 };
+
 export const getCategoryIcon = (category: string) => {
   switch (category.toLowerCase()) {
     case "food":
@@ -43,6 +44,7 @@ export const getCategoryIcon = (category: string) => {
       return "dots-horizontal";
   }
 };
+
 export const normalizeDate = (date: Date) => {
   date.setHours(0, 0, 0, 0);
   return date;

@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { updateUserThunk } from "../../store/features/user/userThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createTransaction } from "../../store/features/transactions/transactionThunk";
+import colors from "../../CommonComponent/Theme/Color";
 
 const schema = yup.object().shape({
   amount: yup
@@ -33,8 +34,8 @@ type FormData = {
 
 export default function AddMoneyScreen() {
   const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.user);
   const navigation = useAppNavigation();
+  const { user, loading } = useAppSelector((state) => state.user);
 
   const {
     control,
@@ -106,7 +107,7 @@ export default function AddMoneyScreen() {
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={colors.ivory} />
         ) : (
           <Text textType="baseRegularBold" style={styles.addButtonText}>
             Add Money

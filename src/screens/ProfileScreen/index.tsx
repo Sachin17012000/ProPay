@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Alert,
@@ -17,25 +17,27 @@ import {
 import { getInitials } from "../../utils/utils";
 import { setBudget } from "../../store/features/expenseTracker/expenseSlice";
 import BudgetModal from "../../CommonComponent/BudgetModal";
+import colors from "../../CommonComponent/Theme/Color";
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
+
   const { loading, user } = useAppSelector((state) => state.user);
   const transactions = useAppSelector(
     (state) => state.transactions.transactions
   );
   const budgets = useAppSelector((state) => state.expenses.budgets);
-  const [editing, setEditing] = React.useState(false);
-  const [name, setName] = React.useState(user?.name ?? "");
 
-  const [budgetModalVisible, setBudgetModalVisible] = React.useState(false);
-  const [daily, setDaily] = React.useState(
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(user?.name ?? "");
+  const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [daily, setDaily] = useState(
     budgets.find((b) => b.period === "Daily")?.amount.toString() ?? ""
   );
-  const [weekly, setWeekly] = React.useState(
+  const [weekly, setWeekly] = useState(
     budgets.find((b) => b.period === "Weekly")?.amount.toString() ?? ""
   );
-  const [monthly, setMonthly] = React.useState(
+  const [monthly, setMonthly] = useState(
     budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? ""
   );
 
@@ -81,7 +83,6 @@ export default function ProfileScreen() {
             {getInitials(user)}
           </Text>
         </View>
-
         <View style={styles.card}>
           <View style={styles.rowBetween}>
             <Text textType="baseRegularBold">Name:</Text>
@@ -105,7 +106,7 @@ export default function ProfileScreen() {
               onPress={handleSaveName}
             >
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={colors.ivory} />
               ) : (
                 <Text textType="baseRegularBold" style={styles.saveButtonText}>
                   Save Name
@@ -113,12 +114,10 @@ export default function ProfileScreen() {
               )}
             </TouchableOpacity>
           )}
-
           <Text textType="baseRegularBold" style={styles.label}>
             Email:
           </Text>
           <Text textType="baseRegular">{user?.email}</Text>
-
           <Text textType="baseRegularBold" style={styles.label}>
             Wallet Balance:
           </Text>
@@ -129,7 +128,7 @@ export default function ProfileScreen() {
           <Text textType="baseRegular">{transactions?.length ?? 0}</Text>
         </View>
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: "#4CAF50" }]}
+          style={[styles.button, { backgroundColor: colors.green }]}
           onPress={() => setBudgetModalVisible(true)}
         >
           <Text textType="baseRegularBold" style={styles.buttonText}>
@@ -137,7 +136,7 @@ export default function ProfileScreen() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: "red" }]}
+          style={[styles.button, { backgroundColor: colors.dangerRed }]}
           onPress={handleLogout}
         >
           <Text textType="baseRegularBold" style={styles.buttonText}>

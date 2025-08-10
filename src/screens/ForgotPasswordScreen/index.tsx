@@ -9,21 +9,26 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { forgotPasswordThunk } from "../../store/features/user/userThunk";
 import { clearRetrievedPassword } from "../../store/features/user/userSlice";
+import colors from "../../CommonComponent/Theme/Color";
 
 const ForgotPassword = () => {
+  const dispatch = useAppDispatch();
+
+  const loading = useAppSelector((state) => state.user.loading);
+  const retrievedPassword = useAppSelector(
+    (state) => state.user.retrievedPassword
+  );
+  const error = useAppSelector((state) => state.user.error);
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(forgotPasswordSchema) });
-  const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.user.loading);
-  const retrievedPassword = useAppSelector(
-    (state) => state.user.retrievedPassword
-  );
-  const error = useAppSelector((state) => state.user.error);
-  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = async (data) => {
     const resultAction = await dispatch(
       forgotPasswordThunk({ email: data.email })
@@ -40,11 +45,13 @@ const ForgotPassword = () => {
       );
     }
   };
+
   useEffect(() => {
     return () => {
       dispatch(clearRetrievedPassword());
     };
   }, []);
+
   return (
     <View style={style.container}>
       <Text textType="largeBold" style={style.headingStyle}>
@@ -68,7 +75,7 @@ const ForgotPassword = () => {
         onPress={handleSubmit(onSubmit)}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={colors.ivory} />
         ) : (
           <Text style={style.buttonText}>Get Password</Text>
         )}
@@ -85,10 +92,9 @@ const ForgotPassword = () => {
           </TouchableOpacity>
         </View>
       )}
-
       {retrievedPassword && showPassword && (
         <View style={style.passwordBox}>
-          <Text textType="mediumSemiBold" style={style.passwordText}>
+          <Text textType="baseRegularBold" style={style.passwordText}>
             Your Password: {retrievedPassword}
           </Text>
         </View>

@@ -16,11 +16,14 @@ import { registerSchema } from "./validations";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { registerThunk } from "../../store/features/user/userThunk";
 import { RegisterFormData } from "../../types";
+import colors from "../../CommonComponent/Theme/Color";
 
 export default function RegisterScreen() {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
+
   const { loading } = useAppSelector((state) => state.user);
+
   const {
     control,
     handleSubmit,
@@ -88,7 +91,7 @@ export default function RegisterScreen() {
         style={[styles.button, loading && { opacity: 0.6 }]}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={colors.ivory} />
         ) : (
           <Text style={styles.buttonText}>Register</Text>
         )}

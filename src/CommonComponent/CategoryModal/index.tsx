@@ -24,10 +24,9 @@ export default function CategoryModal({
     >
       <View style={styles.overlay}>
         <View style={styles.sheet}>
-          <Text textType="headingBold" style={styles.title}>
+          <Text textType="mediumSemiBold" style={styles.title}>
             Select Category
           </Text>
-
           <FlatList
             data={categories}
             keyExtractor={(item) => item}
@@ -35,7 +34,7 @@ export default function CategoryModal({
               <Pressable
                 style={({ pressed }) => [
                   styles.option,
-                  pressed && { backgroundColor: colors.background },
+                  pressed && { backgroundColor: colors.white },
                 ]}
                 onPress={() => {
                   onSelect(item);
@@ -49,7 +48,6 @@ export default function CategoryModal({
             )}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
           />
-
           <Pressable
             onPress={onClose}
             style={({ pressed }) => [
@@ -57,7 +55,7 @@ export default function CategoryModal({
               pressed && { opacity: 0.8 },
             ]}
           >
-            <Text textType="baseRegular" style={styles.cancelButtonText}>
+            <Text textType="baseRegularBold" style={styles.cancelButtonText}>
               Cancel
             </Text>
           </Pressable>
@@ -71,15 +69,15 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: colors.shadowBlack,
   },
   sheet: {
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: "60%",
-    shadowColor: "#000",
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
@@ -87,8 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 15,
-    fontSize: 18,
-    color: colors.textPrimary,
+    color: colors.black,
   },
   option: {
     paddingVertical: 14,
@@ -96,26 +93,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   optionText: {
-    fontSize: 16,
-    color: colors.textPrimary,
+    color: colors.black,
   },
   separator: {
     height: 1,
-    backgroundColor: colors.border,
+    backgroundColor: colors.ash,
     opacity: 0.3,
   },
   cancelButton: {
     marginTop: 15,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.ash,
   },
   cancelButtonText: {
-    color: "red",
-    fontWeight: "600",
-    fontSize: 15,
+    color: colors.crimson,
   },
 });

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 20,
     paddingTop: 100,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
   title: {
     marginBottom: 24,
@@ -14,21 +14,21 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.inputBorder,
+    borderColor: colors.silver,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 18,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.blue,
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 5,
   },
   buttonText: {
-    color: colors.buttonText,
+    color: colors.ivory,
   },
   linkTextView: {
     flexDirection: "row",
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginLeft: 10,
-    color: colors.link,
+    color: colors.royalBlue,
   },
   error: {
     color: "red",

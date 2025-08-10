@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   View,
@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from "react-native";
 import Text from "../../CommonComponent/Text";
+import colors from "../Theme/Color";
 
 interface BudgetModalProps {
   visible: boolean;
@@ -44,12 +45,11 @@ export default function BudgetModal({
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.modalContent}>
-              <Text textType="headingBold" style={{ marginBottom: 15 }}>
+              <Text textType="headingBold" style={styles.marginBottom15}>
                 Set Budgets
               </Text>
-
-              <View style={{ marginBottom: 10 }}>
-                <Text textType="baseRegularBold" style={{ marginBottom: 5 }}>
+              <View style={styles.marginBottom10}>
+                <Text textType="baseRegularBold" style={styles.marginBottom5}>
                   Daily Budget
                 </Text>
                 <TextInput
@@ -60,8 +60,8 @@ export default function BudgetModal({
                   style={styles.input}
                 />
               </View>
-              <View style={{ marginBottom: 10 }}>
-                <Text textType="baseRegularBold" style={{ marginBottom: 5 }}>
+              <View style={styles.marginBottom10}>
+                <Text textType="baseRegularBold" style={styles.marginBottom5}>
                   Weekly Budget
                 </Text>
                 <TextInput
@@ -72,9 +72,8 @@ export default function BudgetModal({
                   style={styles.input}
                 />
               </View>
-
-              <View style={{ marginBottom: 10 }}>
-                <Text textType="baseRegularBold" style={{ marginBottom: 5 }}>
+              <View style={styles.marginBottom10}>
+                <Text textType="baseRegularBold" style={styles.marginBottom5}>
                   Monthly Budget
                 </Text>
                 <TextInput
@@ -85,18 +84,14 @@ export default function BudgetModal({
                   style={styles.input}
                 />
               </View>
-
               <View style={styles.rowBetween}>
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: "#4CAF50" }]}
-                  onPress={onSave}
-                >
+                <TouchableOpacity style={styles.button} onPress={onSave}>
                   <Text textType="baseRegularBold" style={styles.buttonText}>
                     Save
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.button, { backgroundColor: "gray" }]}
+                  style={[styles.button, { backgroundColor: colors.grey }]}
                   onPress={onClose}
                 >
                   <Text textType="baseRegularBold" style={styles.buttonText}>
@@ -115,19 +110,19 @@ export default function BudgetModal({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: colors.shadowBlack,
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
     width: "85%",
-    backgroundColor: "#fff",
+    backgroundColor: colors.ivory,
     borderRadius: 12,
     padding: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.ash,
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
@@ -143,8 +138,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 5,
+    backgroundColor: colors.green,
   },
   buttonText: {
-    color: "#fff",
+    color: colors.ivory,
+  },
+  marginBottom5: {
+    marginBottom: 5,
+  },
+  marginBottom10: {
+    marginBottom: 10,
+  },
+  marginBottom15: {
+    marginBottom: 15,
   },
 });

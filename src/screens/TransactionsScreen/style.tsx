@@ -4,31 +4,29 @@ import colors from "../../CommonComponent/Theme/Color";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     padding: 16,
   },
   title: {
     marginBottom: 12,
-    color: colors.textPrimary,
-    // fontSize: 20,
-    // fontWeight: "bold",
+    color: colors.black,
   },
   transactionCard: {
-    backgroundColor: colors.cardBackground,
+    backgroundColor: colors.offWhite,
     padding: 16,
     borderRadius: 14,
     marginBottom: 14,
-    borderColor: colors.border,
+    borderColor: colors.ash,
     borderWidth: 1,
-    shadowColor: "#000",
+    shadowColor: colors.lightShadowBlack,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 3,
   },
   trackedTransactionCard: {
-    backgroundColor: "#e6ffed", // light green for tracked
-    borderColor: "#70db8f",
+    backgroundColor: colors.lightWhite,
+    borderColor: colors.emerald,
   },
   rowBetween: {
     flexDirection: "row",
@@ -37,28 +35,22 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   transactionName: {
-    color: colors.transactionName,
-    // fontSize: 15,
-    // fontWeight: "500",
+    color: colors.granite,
   },
   transactionAmount: {
     fontWeight: "bold",
-    // fontSize: 16,
   },
   transactionDate: {
-    color: colors.textSecondary,
-    // fontSize: 12,
+    color: colors.grey,
   },
   transactionNote: {
-    color: colors.note,
+    color: colors.noteGrey,
     fontStyle: "italic",
-    // fontSize: 12,
   },
   emptyMessage: {
     textAlign: "center",
-    color: colors.infoText,
+    color: colors.mist,
     marginTop: 40,
-    // fontSize: 14,
   },
   filterContainer: {
     flexDirection: "row",
@@ -69,33 +61,26 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.ash,
     borderRadius: 8,
     flex: 1,
     marginHorizontal: 4,
   },
   filterButtonText: {
-    color: colors.textPrimary,
-    // fontSize: 14,
+    color: colors.black,
     textAlign: "center",
   },
   activeFilterButton: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
   },
   activeFilterButtonText: {
-    color: colors.buttonText,
-    // fontWeight: "600",
+    color: colors.ivory,
   },
   dateCategoryView: {
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
-  },
-  transactionCategory: {
-    // marginTop: 2,
-    color: "#6B7280",
-    // fontStyle: "italic",
   },
 });
 
