@@ -16,11 +16,6 @@ export default StyleSheet.create({
   title: {
     color: colors.black,
   },
-  filterIconStyle: {
-    padding: 8,
-    backgroundColor: colors.orange,
-    borderRadius: 8,
-  },
   expenseSummaryHeader: {
     flexDirection: "row",
   },
@@ -116,18 +111,26 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     backgroundColor: colors.offWhite,
-    borderRadius: 10,
-    marginBottom: 8,
-    shadowColor: colors.lightShadowBlack,
-    shadowOffset: { width: 0, height: 1 },
+    borderRadius: 12,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   transactionInfo: {
-    flexDirection: "column",
+    flex: 1,
+    marginRight: 12,
+  },
+  transactionCategory: {
+    marginBottom: 2,
+  },
+  transactionMeta: {
+    color: colors.noteGrey,
   },
   emptyState: {
     alignItems: "center",

@@ -12,14 +12,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
   },
-  textInput: {
-    borderWidth: 1,
-    borderColor: colors.silver,
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    marginBottom: 16,
-  },
   registerLink: {
     color: colors.royalBlue,
     marginTop: 15,

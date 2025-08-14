@@ -63,12 +63,7 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-
   saveButtonText: {
     color: colors.ivory,
-  },
-
-  link: {
-    color: colors.blue,
   },
 });

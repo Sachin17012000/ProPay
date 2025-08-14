@@ -12,14 +12,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.silver,
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    marginBottom: 16,
-  },
   button: {
     backgroundColor: colors.blue,
     padding: 10,
@@ -38,10 +30,6 @@ const styles = StyleSheet.create({
   loginButton: {
     marginLeft: 10,
     color: colors.royalBlue,
-  },
-  error: {
-    color: "red",
-    marginBottom: 8,
   },
 });
 

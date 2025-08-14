@@ -24,10 +24,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  trackedTransactionCard: {
-    backgroundColor: colors.lightWhite,
-    borderColor: colors.emerald,
-  },
   rowBetween: {
     flexDirection: "row",
     justifyContent: "space-between",

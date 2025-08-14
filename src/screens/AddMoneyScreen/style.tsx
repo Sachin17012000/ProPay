@@ -14,9 +14,6 @@ export default StyleSheet.create({
     marginBottom: 12,
     color: colors.grey,
   },
-  input: {
-    marginBottom: 20,
-  },
   paymentMethodBox: {
     padding: 12,
     backgroundColor: colors.softGray,

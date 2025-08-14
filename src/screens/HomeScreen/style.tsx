@@ -17,11 +17,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
   },
-  balanceHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 6,
-  },
   balanceLabel: {
     color: colors.balancedWhite,
   },
@@ -31,29 +26,6 @@ const styles = StyleSheet.create({
   },
   lastUpdated: {
     color: colors.offBlue,
-  },
-  actionsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 25,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.blue,
-    paddingVertical: 12,
-    borderRadius: 12,
-    marginHorizontal: 6,
-    shadowColor: colors.lightShadowBlack,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  actionIcon: {
-    marginRight: 8,
   },
   sectionTitle: {
     marginBottom: 10,
@@ -99,25 +71,6 @@ const styles = StyleSheet.create({
   },
   viewAllButtonText: {
     color: colors.royalBlue,
-  },
-  featureRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 16,
-  },
-  featureCard: {
-    flex: 1,
-    backgroundColor: colors.lightOffWhite,
-    padding: 16,
-    marginHorizontal: 8,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-  },
-  featureLabel: {
-    marginTop: 8,
-    color: colors.lightBlack,
   },
   featureGrid: {
     flexDirection: "row",

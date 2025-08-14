@@ -10,14 +10,15 @@ import { RootState } from "../../store/store";
 import { getCategoryIcon, normalizeDate } from "../../utils/utils";
 import {
   addExpense,
+  deleteExpense,
   setBudget,
 } from "../../store/features/expenseTracker/expenseSlice";
 import BudgetModal from "../../CommonComponent/BudgetModal";
 
 const toggleArray = [
-  { title: "Daily", spent: 500, budget: 1000 },
-  { title: "Weekly", spent: 1500, budget: 5000 },
-  { title: "Monthly", spent: 4000, budget: 20000 },
+  { title: "Daily" },
+  { title: "Weekly" },
+  { title: "Monthly" },
 ];
 
 export default function ExpenseTracker() {
@@ -75,9 +76,10 @@ export default function ExpenseTracker() {
   const filteredExpenses = getDateFilteredExpenses().filter((txn) =>
     selectedCategory ? txn.category === selectedCategory : true
   );
+
   const totalSpent = filteredExpenses
     .filter((txn) => txn.type === "send")
-    .reduce((sum, txn) => sum + txn.amount, 0);
+    .reduce((sum, txn) => sum + Number(txn.amount), 0);
 
   const selectedBudget =
     budgets.find((item) => item.period === activeTab)?.amount || 0;
@@ -99,10 +101,11 @@ export default function ExpenseTracker() {
     getDateFilteredExpenses().forEach((txn) => {
       const cat = txn.category || "Others";
       if (!map[cat]) map[cat] = 0;
+      const amount = Number(txn.amount);
       if (txn.type === "send") {
-        map[cat] += txn.amount;
+        map[cat] += amount;
       } else {
-        map[cat] -= txn.amount;
+        map[cat] -= amount;
       }
     });
     return Object.entries(map).map(([name, amount]) => ({
@@ -120,6 +123,26 @@ export default function ExpenseTracker() {
     } else {
       Alert.alert("Error", "Please fill in all budget fields.");
     }
+  };
+  const handleLongPress = (id: string) => {
+    const isManual = manualExpenses.some((exp) => exp.id === id);
+
+    Alert.alert(
+      "Delete Expense",
+      isManual
+        ? "Are you sure you want to delete this expense?"
+        : "This is a synced transaction and You can delete it from Transactions.",
+      isManual
+        ? [
+            { text: "Cancel", style: "cancel" },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => dispatch(deleteExpense(id)),
+            },
+          ]
+        : [{ text: "OK" }]
+    );
   };
   return (
     <View style={{ flex: 1 }}>
@@ -246,15 +269,17 @@ export default function ExpenseTracker() {
         ) : (
           <View style={styles.transactionList}>
             {filteredExpenses.map((item) => (
-              <View key={item.id} style={styles.transactionItem}>
+              <TouchableOpacity
+                key={item.id}
+                activeOpacity={0.7}
+                style={styles.transactionItem}
+                onLongPress={() => handleLongPress(item.id)}
+              >
                 <View style={styles.transactionInfo}>
-                  <Text textType="baseSemiBold">
+                  <Text style={styles.transactionCategory}>
                     {item.category || "Uncategorized"}
                   </Text>
-                  <Text
-                    textType="smallRegular"
-                    style={{ color: colors.noteGrey }}
-                  >
+                  <Text style={styles.transactionMeta}>
                     {item.date} • {item.note?.trim() ? item.note : "(No Note)"}{" "}
                     {item.type === "send"
                       ? item.to?.trim()
@@ -264,14 +289,17 @@ export default function ExpenseTracker() {
                   </Text>
                 </View>
                 <Text
-                  textType="baseSemiBold"
-                  style={{
-                    color: item.type === "add" ? "green" : "red",
-                  }}
+                  style={[
+                    {
+                      color:
+                        item.type === "add" ? colors.emerald : colors.dangerRed,
+                    },
+                  ]}
                 >
-                  {item.type === "add" ? "+" : "-"}₹{item.amount}
+                  {item.type === "add" ? "+" : "-"}₹
+                  {Number(item.amount).toLocaleString("en-IN")}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         )}

@@ -67,7 +67,7 @@ export default function HomeScreen() {
           icon="wallet-plus"
           label="Add Money"
           onPress={() => navigation.navigate("AddMoney")}
-          color={colors.lightGreen}
+          color={colors.emerald}
         />
         <FeatureButton
           icon="send"
