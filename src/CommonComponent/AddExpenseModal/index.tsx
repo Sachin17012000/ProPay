@@ -5,9 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  FlatList,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import uuid from "react-native-uuid";
@@ -31,47 +31,62 @@ export const AddExpenseModal: React.FC<Props> = ({
   onSave,
 }) => {
   const { user } = useAppSelector((state) => state.user);
-  const [type, setType] = useState<"send" | "add">("send");
-  const [amount, setAmount] = useState("");
-  const [to, setTo] = useState("");
-  const [from, setFrom] = useState("");
-  const [note, setNote] = useState("");
-  const [category, setCategory] = useState("Others");
-  const [date, setDate] = useState(new Date());
+  const [form, setForm] = useState({
+    type: "send" as "send" | "add",
+    amount: "",
+    to: "",
+    from: "",
+    note: "",
+    category: "Food",
+    date: new Date(),
+  });
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const reset = () => {
-    setType("send");
-    setAmount("");
-    setTo("");
-    setFrom("");
-    setNote("");
-    setCategory("Others");
-    setDate(new Date());
-  };
+  const updateForm = (key: keyof typeof form, value: any) =>
+    setForm((prev) => ({ ...prev, [key]: value }));
+
+  const resetForm = () =>
+    setForm({
+      type: "send",
+      amount: "",
+      to: "",
+      from: "",
+      note: "",
+      category: "Food",
+      date: new Date(),
+    });
 
   const handleSave = () => {
-    if (!amount || isNaN(Number(amount))) {
+    if (
+      !form.amount ||
+      isNaN(Number(form.amount)) ||
+      Number(form.amount) <= 0
+    ) {
       return alert("Please enter a valid amount");
     }
     const newTxn: Transaction = {
       id: uuid.v4() as string,
-      type,
-      amount: Number(amount),
-      to: type === "send" ? to : undefined,
-      from: type === "add" ? from : undefined,
-      note: note || undefined,
-      date: date.toISOString().split("T")[0],
+      type: form.type,
+      amount: Number(form.amount),
+      to: form.type === "send" ? form.to : undefined,
+      from: form.type === "add" ? form.from : undefined,
+      note: form.note || undefined,
+      date: form.date.toISOString().split("T")[0],
       userId: user.id,
-      category,
+      category: form.category,
     };
     onSave(newTxn);
-    reset();
+    resetForm();
     onClose();
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent
+      onRequestClose={onClose}
+    >
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
@@ -79,122 +94,141 @@ export const AddExpenseModal: React.FC<Props> = ({
         }}
       >
         <View style={styles.overlay}>
-          <View style={styles.container}>
-            <Text textType="largeBold" style={styles.header}>
-              Add Expense
-            </Text>
-            <View style={styles.switchRow}>
-              <TouchableOpacity
-                onPress={() => setType("send")}
-                style={[styles.switchBtn, type === "send" && styles.active]}
-              >
-                <Text
-                  style={
-                    type === "send" ? styles.activeText : styles.inactiveText
-                  }
-                >
-                  Send
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setType("add")}
-                style={[styles.switchBtn, type === "add" && styles.active]}
-              >
-                <Text
-                  style={
-                    type === "add" ? styles.activeText : styles.inactiveText
-                  }
-                >
-                  Add
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              placeholder="Amount"
-              keyboardType="numeric"
-              style={styles.input}
-              value={amount}
-              onChangeText={setAmount}
-            />
-            {type === "send" && (
-              <TextInput
-                placeholder="To (optional)"
-                style={styles.input}
-                value={to}
-                onChangeText={setTo}
-              />
-            )}
-            {type === "add" && (
-              <TextInput
-                placeholder="From (optional)"
-                style={styles.input}
-                value={from}
-                onChangeText={setFrom}
-              />
-            )}
-            <TextInput
-              placeholder="Note (optional)"
-              style={styles.input}
-              value={note}
-              onChangeText={setNote}
-            />
-            <Text textType="semiRegular" style={styles.label}>
-              Select Category
-            </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {categories.map((cat) => (
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+              <Text textType="largeBold" style={styles.header}>
+                Add Expense
+              </Text>
+              <View style={styles.switchRow}>
                 <TouchableOpacity
-                  key={cat}
+                  onPress={() => updateForm("type", "send")}
                   style={[
-                    styles.categoryChip,
-                    category === cat && styles.selectedCategoryChip,
+                    styles.switchBtn,
+                    form.type === "send" && styles.active,
                   ]}
-                  onPress={() => setCategory(cat)}
                 >
-                  <MaterialCommunityIcons
-                    name="tag-outline"
-                    size={16}
-                    color={category === cat ? colors.ivory : colors.granite}
-                  />
                   <Text
-                    textType="semiRegular"
-                    style={[
-                      styles.categoryChipText,
-                      category === cat && { color: colors.ivory },
-                    ]}
+                    style={
+                      form.type === "send"
+                        ? styles.activeText
+                        : styles.inactiveText
+                    }
                   >
-                    {cat}
+                    Spent
                   </Text>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text textType="baseRegular" style={styles.dateText}>
-                📅 {date.toDateString()}
-              </Text>
-            </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                value={date}
-                mode="date"
-                display={Platform.OS === "ios" ? "inline" : "default"}
-                onChange={(e, selectedDate) => {
-                  setShowDatePicker(false);
-                  if (selectedDate) setDate(selectedDate);
-                }}
+                <TouchableOpacity
+                  onPress={() => updateForm("type", "add")}
+                  style={[
+                    styles.switchBtn,
+                    form.type === "add" && styles.active,
+                  ]}
+                >
+                  <Text
+                    style={
+                      form.type === "add"
+                        ? styles.activeText
+                        : styles.inactiveText
+                    }
+                  >
+                    Received
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                placeholder="Amount"
+                keyboardType="numeric"
+                style={styles.input}
+                value={form.amount}
+                onChangeText={(amount) => updateForm("amount", amount)}
               />
-            )}
-            <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={onClose} style={styles.cancel}>
-                <Text style={styles.cancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleSave} style={styles.save}>
-                <Text textType="baseRegularBold" style={styles.saveText}>
-                  Save
+              {form.type === "send" && (
+                <TextInput
+                  placeholder="To (optional)"
+                  style={styles.input}
+                  value={form.to}
+                  onChangeText={(to) => updateForm("to", to)}
+                />
+              )}
+              {form.type === "add" && (
+                <TextInput
+                  placeholder="From (optional)"
+                  style={styles.input}
+                  value={form.from}
+                  onChangeText={(from) => updateForm("from", from)}
+                />
+              )}
+              <TextInput
+                placeholder="Note (optional)"
+                style={styles.input}
+                value={form.note}
+                onChangeText={(note) => updateForm("note", note)}
+              />
+              <Text textType="semiRegular" style={styles.label}>
+                Select Category
+              </Text>
+              <FlatList
+                horizontal
+                data={categories}
+                keyExtractor={(item) => item}
+                renderItem={({ item: cat }) => (
+                  <TouchableOpacity
+                    key={cat}
+                    style={[
+                      styles.categoryChip,
+                      form.category === cat && styles.selectedCategoryChip,
+                    ]}
+                    onPress={() => updateForm("category", cat)}
+                  >
+                    <MaterialCommunityIcons
+                      name="tag-outline"
+                      size={16}
+                      color={
+                        form.category === cat ? colors.ivory : colors.granite
+                      }
+                    />
+                    <Text
+                      textType="semiRegular"
+                      style={[
+                        styles.categoryChipText,
+                        form.category === cat && { color: colors.ivory },
+                      ]}
+                    >
+                      {cat}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingVertical: 4 }}
+              />
+              <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                <Text textType="baseRegular" style={styles.dateText}>
+                  📅 {form.date.toDateString()}
                 </Text>
               </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={form.date}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "inline" : "default"}
+                  onChange={(e, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) updateForm("date", selectedDate);
+                  }}
+                />
+              )}
+              <View style={styles.buttonRow}>
+                <TouchableOpacity onPress={onClose} style={styles.cancel}>
+                  <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSave} style={styles.save}>
+                  <Text textType="baseRegularBold" style={styles.saveText}>
+                    Save
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>
     </Modal>

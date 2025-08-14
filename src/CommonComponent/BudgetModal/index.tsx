@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   rowBetween: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     justifyContent: "space-between",
     marginTop: 10,
   },

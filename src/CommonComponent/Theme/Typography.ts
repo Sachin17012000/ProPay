@@ -17,6 +17,10 @@ const typography = {
       fontSize: 14,
       fontWeight: "400",
     },
+    semiRegularBold: {
+      fontSize: 14,
+      fontWeight: "600",
+    },
     baseRegular: {
       fontSize: 16,
       fontWeight: "400",

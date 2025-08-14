@@ -15,6 +15,10 @@ export default function CategoryModal({
   onClose,
   onSelect,
 }: CategoryModalProps) {
+  const handleSelect = (category: string) => {
+    onSelect(category);
+    onClose();
+  };
   return (
     <Modal
       visible={visible}
@@ -30,16 +34,14 @@ export default function CategoryModal({
           <FlatList
             data={categories}
             keyExtractor={(item) => item}
+            keyboardShouldPersistTaps="handled"
             renderItem={({ item }) => (
               <Pressable
                 style={({ pressed }) => [
                   styles.option,
                   pressed && { backgroundColor: colors.white },
                 ]}
-                onPress={() => {
-                  onSelect(item);
-                  onClose();
-                }}
+                onPress={() => handleSelect(item)}
               >
                 <Text textType="baseRegular" style={styles.optionText}>
                   {item}

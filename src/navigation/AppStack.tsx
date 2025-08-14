@@ -4,12 +4,13 @@ import AddMoneyScreen from "../screens/AddMoneyScreen";
 import SendMoneyScreen from "../screens/SendMoneyScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import { useAppSelector } from "../hooks/hook";
 import { getInitials } from "../utils/utils";
 import ExpenseTracker from "../screens/ExpenseTracker";
-
+import colors from "../CommonComponent/Theme/Color";
+import Text from "../CommonComponent/Text";
 const Stack = createNativeStackNavigator();
 
 export default function AppStack() {
@@ -33,13 +34,16 @@ export default function AppStack() {
                   width: 36,
                   height: 36,
                   borderRadius: 18,
-                  backgroundColor: "#1e40af",
+                  backgroundColor: colors.royalBlue,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
                 <Text
-                  style={{ color: "#fff", fontWeight: "bold", fontSize: 14 }}
+                  textType="semiRegularBold"
+                  style={{
+                    color: colors.ivory,
+                  }}
                 >
                   {getInitials(user)}
                 </Text>
