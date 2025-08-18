@@ -8,3 +8,8 @@ export const categories = [
   "Health",
   "Others",
 ];
+export const toggleArray = [
+  { title: "Daily" },
+  { title: "Weekly" },
+  { title: "Monthly" },
+];

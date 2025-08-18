@@ -7,19 +7,15 @@ import colors from "../../CommonComponent/Theme/Color";
 import { AddExpenseModal } from "../../CommonComponent/AddExpenseModal";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { RootState } from "../../store/store";
-import { getCategoryIcon, normalizeDate } from "../../utils/utils";
+import { getCategoryIcon, getDateFilteredExpenses } from "../../utils/utils";
 import {
   addExpense,
   deleteExpense,
   setBudget,
 } from "../../store/features/expenseTracker/expenseSlice";
 import BudgetModal from "../../CommonComponent/BudgetModal";
-
-const toggleArray = [
-  { title: "Daily" },
-  { title: "Weekly" },
-  { title: "Monthly" },
-];
+import ExpenseDetails from "../../CommonComponent/ExpenseDetails";
+import ExpenseTransactions from "../../CommonComponent/ExpenseTransactions";
 
 export default function ExpenseTracker() {
   const dispatch = useAppDispatch();
@@ -48,32 +44,10 @@ export default function ExpenseTracker() {
     budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? ""
   );
 
-  const getDateFilteredExpenses = () => {
-    const now = new Date();
-    return allExpenses.filter((txn) => {
-      const txnDate = normalizeDate(new Date(txn.date));
-      if (activeTab === "Daily") {
-        return (
-          txnDate.getDate() === now.getDate() &&
-          txnDate.getMonth() === now.getMonth() &&
-          txnDate.getFullYear() === now.getFullYear()
-        );
-      }
-      if (activeTab === "Weekly") {
-        const startOfWeek = normalizeDate(new Date(now));
-        startOfWeek.setDate(now.getDate() - now.getDay());
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        return txnDate >= startOfWeek && txnDate <= endOfWeek;
-      }
-      return (
-        txnDate.getMonth() === now.getMonth() &&
-        txnDate.getFullYear() === now.getFullYear()
-      );
-    });
-  };
-
-  const filteredExpenses = getDateFilteredExpenses().filter((txn) =>
+  const filteredExpenses = getDateFilteredExpenses(
+    allExpenses,
+    activeTab
+  ).filter((txn) =>
     selectedCategory ? txn.category === selectedCategory : true
   );
 
@@ -84,21 +58,12 @@ export default function ExpenseTracker() {
   const selectedBudget =
     budgets.find((item) => item.period === activeTab)?.amount || 0;
 
-  const percentUsed = selectedBudget
-    ? Math.min((totalSpent / selectedBudget) * 100, 100)
-    : 0;
-
-  const getToggleTitle = () => {
-    if (activeTab === "Daily") return "Day";
-    if (activeTab === "Weekly") return "Week";
-    return "Month";
-  };
   const handleSaveExpense = (expense) => {
     dispatch(addExpense(expense));
   };
   const categoryTotals = useMemo(() => {
     const map: Record<string, number> = {};
-    getDateFilteredExpenses().forEach((txn) => {
+    getDateFilteredExpenses(allExpenses, activeTab).forEach((txn) => {
       const cat = txn.category || "Others";
       if (!map[cat]) map[cat] = 0;
       const amount = Number(txn.amount);
@@ -152,63 +117,13 @@ export default function ExpenseTracker() {
             Expense Tracker
           </Text>
         </View>
-        <View style={styles.expenseSummaryHeader}>
-          <MaterialCommunityIcons
-            name="chart-bar"
-            size={18}
-            style={styles.chartBarIconStyle}
-          />
-          <Text textType="baseRegular" style={styles.title}>
-            This {getToggleTitle()}
-          </Text>
-        </View>
-        <View style={styles.toggleSection}>
-          {toggleArray.map((toggle) => (
-            <TouchableOpacity
-              key={toggle.title}
-              style={[
-                styles.toggleTitle,
-                activeTab === toggle.title && styles.activeToggle,
-              ]}
-              onPress={() => setActiveTab(toggle.title)}
-            >
-              <Text
-                textType="baseRegular"
-                style={[
-                  styles.toggleButtonText,
-                  activeTab === toggle.title && styles.activeToggleButtonText,
-                ]}
-              >
-                {toggle.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <View style={styles.summarySection}>
-          <Text textType="semiRegular" style={styles.summaryLine}>
-            Total Spent: ₹{totalSpent}
-          </Text>
-          <Text textType="semiRegular" style={styles.summaryLine}>
-            Budget: ₹{selectedBudget}
-          </Text>
-          <Text textType="semiRegular" style={styles.summaryLine}>
-            Remaining: ₹{selectedBudget - totalSpent}
-          </Text>
-          <View style={styles.progressBarBackground}>
-            <View
-              style={[styles.progressBarFill, { width: `${percentUsed}%` }]}
-            />
-          </View>
-          <Text textType="smallRegular" style={styles.percentUsedText}>
-            {percentUsed.toFixed(0)}% Used
-          </Text>
-          <TouchableOpacity
-            style={styles.budgetButton}
-            onPress={() => setBudgetModalVisible(true)}
-          >
-            <Text style={{ color: "white" }}>Set Budget</Text>
-          </TouchableOpacity>
-        </View>
+        <ExpenseDetails
+          selectedBudget={selectedBudget}
+          totalSpent={totalSpent}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setBudgetModalVisible={setBudgetModalVisible}
+        />
         {categoryTotals.length > 0 && (
           <View>
             <Text textType="mediumSemiBold" style={styles.categoryTitle}>
@@ -252,57 +167,10 @@ export default function ExpenseTracker() {
             </ScrollView>
           </View>
         )}
-        <Text textType="mediumSemiBold" style={styles.transactionTitle}>
-          Recent Transactions
-        </Text>
-        {filteredExpenses.length === 0 ? (
-          <View style={styles.emptyState}>
-            <MaterialCommunityIcons
-              name="file-document-outline"
-              size={50}
-              color={colors.ash}
-            />
-            <Text textType="baseRegular" style={styles.emptyText}>
-              No transactions yet. Tap + to add one!
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.transactionList}>
-            {filteredExpenses.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                activeOpacity={0.7}
-                style={styles.transactionItem}
-                onLongPress={() => handleLongPress(item.id)}
-              >
-                <View style={styles.transactionInfo}>
-                  <Text style={styles.transactionCategory}>
-                    {item.category || "Uncategorized"}
-                  </Text>
-                  <Text style={styles.transactionMeta}>
-                    {item.date} • {item.note?.trim() ? item.note : "(No Note)"}{" "}
-                    {item.type === "send"
-                      ? item.to?.trim()
-                        ? `• To: ${item.to}`
-                        : "• Sent"
-                      : "• Received"}
-                  </Text>
-                </View>
-                <Text
-                  style={[
-                    {
-                      color:
-                        item.type === "add" ? colors.emerald : colors.dangerRed,
-                    },
-                  ]}
-                >
-                  {item.type === "add" ? "+" : "-"}₹
-                  {Number(item.amount).toLocaleString("en-IN")}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
+        <ExpenseTransactions
+          handleLongPress={handleLongPress}
+          filteredExpenses={filteredExpenses}
+        />
       </ScrollView>
       <AddExpenseModal
         visible={showAddModal}

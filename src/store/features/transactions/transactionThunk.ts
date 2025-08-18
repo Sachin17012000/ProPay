@@ -13,7 +13,11 @@ export const fetchTransactionsByUser = createAsyncThunk<Transaction[], string>(
     const fromStorage = (await getSavedTransactions()).filter(
       (txn) => txn.userId === userId
     );
-    return [...fromStorage, ...fromJson];
+    const merged = [...fromStorage, ...fromJson];
+    const unique = Array.from(
+      new Map(merged.map((txn) => [txn.id, txn])).values()
+    );
+    return unique;
   }
 );
 export const createTransaction = createAsyncThunk<Transaction, Transaction>(

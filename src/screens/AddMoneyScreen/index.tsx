@@ -46,7 +46,14 @@ export default function AddMoneyScreen() {
   });
 
   const onSubmit = async (data: FormData) => {
-    if (!user) return;
+    if (!user) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "No user found. Please log in again.",
+      });
+      return;
+    }
     const newBalance = user.balance + data.amount;
     try {
       const updateResult = await dispatch(
@@ -83,7 +90,12 @@ export default function AddMoneyScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        loading && { opacity: 0.6, pointerEvents: "none" },
+      ]}
+    >
       <Text textType="headingBold" style={styles.title}>
         Add Money
       </Text>

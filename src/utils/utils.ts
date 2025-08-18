@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { Transaction, User } from "../types";
 
 const allowedUserIds = [
   "user001",
@@ -11,7 +11,7 @@ const allowedUserIds = [
   "user008",
 ];
 
-export const randomId =
+export const randomId = () =>
   allowedUserIds[Math.floor(Math.random() * allowedUserIds.length)];
 
 export const getInitials = (user: User) => {
@@ -48,4 +48,36 @@ export const getCategoryIcon = (category: string) => {
 export const normalizeDate = (date: Date) => {
   date.setHours(0, 0, 0, 0);
   return date;
+};
+export const getDateFilteredExpenses = (
+  allExpenses: Transaction[],
+  activeTab: string
+) => {
+  const now = new Date();
+  return allExpenses.filter((txn) => {
+    const txnDate = normalizeDate(new Date(txn.date));
+    if (activeTab === "Daily") {
+      return (
+        txnDate.getDate() === now.getDate() &&
+        txnDate.getMonth() === now.getMonth() &&
+        txnDate.getFullYear() === now.getFullYear()
+      );
+    }
+    if (activeTab === "Weekly") {
+      const startOfWeek = normalizeDate(new Date(now));
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      return txnDate >= startOfWeek && txnDate <= endOfWeek;
+    }
+    return (
+      txnDate.getMonth() === now.getMonth() &&
+      txnDate.getFullYear() === now.getFullYear()
+    );
+  });
+};
+export const getToggleTitle = (activeTab: string) => {
+  if (activeTab === "Daily") return "Day";
+  if (activeTab === "Weekly") return "Week";
+  return "Month";
 };

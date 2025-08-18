@@ -57,7 +57,7 @@ export const registerThunk = createAsyncThunk<
   if (existing) return rejectWithValue("Email is already registered");
 
   const newUser: UserWithPassword = {
-    id: randomId,
+    id: randomId(),
     name,
     email,
     password,
