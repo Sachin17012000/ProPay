@@ -33,9 +33,17 @@ const typography = {
       fontSize: 18,
       fontWeight: "500",
     },
+    mediumBold: {
+      fontSize: 18,
+      fontWeight: "700",
+    },
     baseMediumBold: {
       fontSize: 20,
       fontWeight: "700",
+    },
+    baseMedium: {
+      fontSize: 20,
+      fontWeight: "400",
     },
     largeBold: {
       fontSize: 22,

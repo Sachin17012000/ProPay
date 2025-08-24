@@ -47,6 +47,9 @@ const colors = {
   neutralGray: "#999",
   charcoalGray: "#666",
   mintMist: "#E6F9EC",
+  mint: "#cce5ff",
+  greyMint: "#99ccff",
+  yellow: "#ffe680",
 };
 
 export default colors;

@@ -8,6 +8,7 @@ export type RootStackParamList = {
   Profile: undefined;
   ForgotPassword: undefined;
   ExpenseTracker: undefined;
+  MarketTrends: undefined;
 };
 export type Transaction = {
   id: string;

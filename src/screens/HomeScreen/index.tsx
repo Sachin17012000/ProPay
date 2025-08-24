@@ -122,7 +122,9 @@ export default function HomeScreen() {
         <FeatureButton
           icon="bank"
           label="Market"
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate("MarketTrends");
+          }}
           color={colors.purple}
         />
       </View>

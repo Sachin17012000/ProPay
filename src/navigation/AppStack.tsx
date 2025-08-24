@@ -11,6 +11,7 @@ import { getInitials } from "../utils/utils";
 import ExpenseTracker from "../screens/ExpenseTracker";
 import colors from "../CommonComponent/Theme/Color";
 import Text from "../CommonComponent/Text";
+import MarketTrends from "../screens/Market Trends";
 const Stack = createNativeStackNavigator();
 
 export default function AppStack() {
@@ -57,6 +58,7 @@ export default function AppStack() {
       <Stack.Screen name="Transactions" component={TransactionsScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="ExpenseTracker" component={ExpenseTracker} />
+      <Stack.Screen name="MarketTrends" component={MarketTrends} />
     </Stack.Navigator>
   );
 }

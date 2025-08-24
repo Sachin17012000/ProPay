@@ -1,3 +1,4 @@
+import colors from "../CommonComponent/Theme/Color";
 import { Transaction, User } from "../types";
 
 const allowedUserIds = [
@@ -94,3 +95,8 @@ export const formatDate = (dateString: string) =>
     month: "short",
     year: "numeric",
   }).format(new Date(dateString));
+export const getVolatilityColor = (volatility: number) => {
+  if (volatility < 33) return colors.green;
+  if (volatility < 66) return colors.yellow;
+  return colors.crimson;
+};
