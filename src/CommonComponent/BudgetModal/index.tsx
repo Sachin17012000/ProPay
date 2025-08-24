@@ -10,30 +10,39 @@ import {
 } from "react-native";
 import Text from "../../CommonComponent/Text";
 import colors from "../Theme/Color";
+import { budgetArray } from "../../utils/staticData";
 
 interface BudgetModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: () => void;
-  daily: string;
-  weekly: string;
-  monthly: string;
-  setDaily: React.Dispatch<React.SetStateAction<string>>;
-  setWeekly: React.Dispatch<React.SetStateAction<string>>;
-  setMonthly: React.Dispatch<React.SetStateAction<string>>;
+  budgets: {
+    Daily: string;
+    Weekly: string;
+    Monthly: string;
+  };
+  setBudgets: React.Dispatch<
+    React.SetStateAction<{ Daily: string; Weekly: string; Monthly: string }>
+  >;
 }
 
 export default function BudgetModal({
   visible,
   onClose,
   onSave,
-  daily,
-  weekly,
-  monthly,
-  setDaily,
-  setWeekly,
-  setMonthly,
+  budgets,
+  setBudgets,
 }: BudgetModalProps) {
+  const handleInputChange = (
+    period: "Daily" | "Weekly" | "Monthly",
+    text: string
+  ) => {
+    const sanitized = text.replace(/[^0-9]/g, "");
+    setBudgets((prev) => ({
+      ...prev,
+      [period]: sanitized === "" || sanitized === "0" ? "" : sanitized,
+    }));
+  };
   return (
     <Modal
       visible={visible}
@@ -48,67 +57,20 @@ export default function BudgetModal({
               <Text textType="headingBold" style={styles.marginBottom15}>
                 Set Budgets
               </Text>
-              <View style={styles.marginBottom10}>
-                <Text textType="baseRegularBold" style={styles.marginBottom5}>
-                  Daily Budget
-                </Text>
-                <TextInput
-                  placeholder="Enter amount"
-                  keyboardType="numeric"
-                  value={daily}
-                  onChangeText={(text) => {
-                    const sanitized = text.replace(/[^0-9]/g, "");
-                    if (sanitized === "" || sanitized === "0") {
-                      setDaily("");
-                    } else {
-                      setDaily(sanitized);
-                    }
-                  }}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.marginBottom10}>
-                <Text textType="baseRegularBold" style={styles.marginBottom5}>
-                  Weekly Budget
-                </Text>
-                <TextInput
-                  placeholder="Enter amount"
-                  keyboardType="numeric"
-                  value={weekly}
-                  onChangeText={(text) => {
-                    // Remove non-digit characters
-                    const sanitized = text.replace(/[^0-9]/g, "");
-                    // Ensure it’s not "0"
-                    if (sanitized === "" || sanitized === "0") {
-                      setWeekly("");
-                    } else {
-                      setWeekly(sanitized);
-                    }
-                  }}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.marginBottom10}>
-                <Text textType="baseRegularBold" style={styles.marginBottom5}>
-                  Monthly Budget
-                </Text>
-                <TextInput
-                  placeholder="Enter amount"
-                  keyboardType="numeric"
-                  value={monthly}
-                  onChangeText={(text) => {
-                    // Remove non-digit characters
-                    const sanitized = text.replace(/[^0-9]/g, "");
-                    // Ensure it’s not "0"
-                    if (sanitized === "" || sanitized === "0") {
-                      setMonthly("");
-                    } else {
-                      setMonthly(sanitized);
-                    }
-                  }}
-                  style={styles.input}
-                />
-              </View>
+              {budgetArray.map((period) => (
+                <View key={period} style={styles.marginBottom10}>
+                  <Text textType="baseRegularBold" style={styles.marginBottom5}>
+                    {period} Budget
+                  </Text>
+                  <TextInput
+                    placeholder="Enter amount"
+                    keyboardType="numeric"
+                    value={budgets[period]}
+                    onChangeText={(text) => handleInputChange(period, text)}
+                    style={styles.input}
+                  />
+                </View>
+              ))}
               <View style={styles.rowBetween}>
                 <TouchableOpacity style={styles.button} onPress={onSave}>
                   <Text textType="baseRegularBold" style={styles.buttonText}>

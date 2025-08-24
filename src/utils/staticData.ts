@@ -13,3 +13,4 @@ export const toggleArray = [
   { title: "Weekly" },
   { title: "Monthly" },
 ];
+export const budgetArray = ["Daily", "Weekly", "Monthly"] as const;

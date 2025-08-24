@@ -11,16 +11,6 @@ export default StyleSheet.create({
     marginBottom: 20,
     color: colors.black,
   },
-  card: {
-    backgroundColor: colors.offWhite,
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 20,
-    elevation: 2,
-  },
-  label: {
-    marginTop: 12,
-  },
   button: {
     backgroundColor: colors.blue,
     padding: 12,
@@ -42,28 +32,6 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   initials: {
-    color: colors.ivory,
-  },
-  rowBetween: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.ash,
-    borderRadius: 8,
-    padding: 10,
-    marginVertical: 10,
-  },
-  saveButton: {
-    backgroundColor: colors.blue,
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  saveButtonText: {
     color: colors.ivory,
   },
 });

@@ -46,15 +46,12 @@ export default function ExpenseTracker() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
-  const [daily, setDaily] = useState(
-    budgets.find((b) => b.period === "Daily")?.amount.toString() ?? ""
-  );
-  const [weekly, setWeekly] = useState(
-    budgets.find((b) => b.period === "Weekly")?.amount.toString() ?? ""
-  );
-  const [monthly, setMonthly] = useState(
-    budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? ""
-  );
+  const [budgetsState, setBudgetsState] = useState({
+    Daily: budgets.find((b) => b.period === "Daily")?.amount.toString() ?? "",
+    Weekly: budgets.find((b) => b.period === "Weekly")?.amount.toString() ?? "",
+    Monthly:
+      budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? "",
+  });
 
   const filteredExpenses = getDateFilteredExpenses(
     allExpenses,
@@ -92,10 +89,11 @@ export default function ExpenseTracker() {
     }));
   }, [allExpenses, activeTab]);
   const handleSaveBudget = () => {
-    if (daily && weekly && monthly) {
-      dispatch(setBudget({ period: "Daily", amount: Number(daily) }));
-      dispatch(setBudget({ period: "Weekly", amount: Number(weekly) }));
-      dispatch(setBudget({ period: "Monthly", amount: Number(monthly) }));
+    const { Daily, Weekly, Monthly } = budgetsState;
+    if (Daily && Weekly && Monthly) {
+      dispatch(setBudget({ period: "Daily", amount: Number(Daily) }));
+      dispatch(setBudget({ period: "Weekly", amount: Number(Weekly) }));
+      dispatch(setBudget({ period: "Monthly", amount: Number(Monthly) }));
       setBudgetModalVisible(false);
     } else {
       Alert.alert("Error", "Please fill in all budget fields.");
@@ -211,12 +209,8 @@ export default function ExpenseTracker() {
       <BudgetModal
         visible={budgetModalVisible}
         onClose={() => setBudgetModalVisible(false)}
-        daily={daily}
-        weekly={weekly}
-        monthly={monthly}
-        setDaily={setDaily}
-        setWeekly={setWeekly}
-        setMonthly={setMonthly}
+        budgets={budgetsState}
+        setBudgets={setBudgetsState}
         onSave={handleSaveBudget}
       />
       <TouchableOpacity

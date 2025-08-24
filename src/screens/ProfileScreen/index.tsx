@@ -1,45 +1,27 @@
 import React, { useState } from "react";
-import {
-  View,
-  Alert,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  ActivityIndicator,
-} from "react-native";
+import { View, Alert, TouchableOpacity, ScrollView } from "react-native";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
-import {
-  logoutThunk,
-  updateUserThunk,
-} from "../../store/features/user/userThunk";
+import { logoutThunk } from "../../store/features/user/userThunk";
 import { getInitials } from "../../utils/utils";
 import { setBudget } from "../../store/features/expenseTracker/expenseSlice";
 import BudgetModal from "../../CommonComponent/BudgetModal";
 import colors from "../../CommonComponent/Theme/Color";
+import ProfileDetailsCard from "../../CommonComponent/ProfileDetailsCard";
 
 export default function ProfileScreen() {
   const dispatch = useAppDispatch();
 
-  const { loading, user } = useAppSelector((state) => state.user);
-  const transactions = useAppSelector(
-    (state) => state.transactions.transactions
-  );
+  const { user } = useAppSelector((state) => state.user);
   const budgets = useAppSelector((state) => state.expenses.budgets);
-
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(user?.name ?? "");
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
-  const [daily, setDaily] = useState(
-    budgets.find((b) => b.period === "Daily")?.amount.toString() ?? ""
-  );
-  const [weekly, setWeekly] = useState(
-    budgets.find((b) => b.period === "Weekly")?.amount.toString() ?? ""
-  );
-  const [monthly, setMonthly] = useState(
-    budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? ""
-  );
+  const [budgetsState, setBudgetsState] = useState({
+    Daily: budgets.find((b) => b.period === "Daily")?.amount.toString() ?? "",
+    Weekly: budgets.find((b) => b.period === "Weekly")?.amount.toString() ?? "",
+    Monthly:
+      budgets.find((b) => b.period === "Monthly")?.amount.toString() ?? "",
+  });
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to log out?", [
@@ -51,22 +33,13 @@ export default function ProfileScreen() {
       },
     ]);
   };
-  const handleSaveName = async () => {
-    if (name.trim()) {
-      const resultAction = await dispatch(updateUserThunk({ name }));
-      if (updateUserThunk.fulfilled.match(resultAction)) {
-        setEditing(false);
-      }
-    } else {
-      Alert.alert("Error", "Name cannot be empty.");
-    }
-  };
 
   const handleSaveBudget = () => {
-    if (daily && weekly && monthly) {
-      dispatch(setBudget({ period: "Daily", amount: Number(daily) }));
-      dispatch(setBudget({ period: "Weekly", amount: Number(weekly) }));
-      dispatch(setBudget({ period: "Monthly", amount: Number(monthly) }));
+    const { Daily, Weekly, Monthly } = budgetsState;
+    if (Daily && Weekly && Monthly) {
+      dispatch(setBudget({ period: "Daily", amount: Number(Daily) }));
+      dispatch(setBudget({ period: "Weekly", amount: Number(Weekly) }));
+      dispatch(setBudget({ period: "Monthly", amount: Number(Monthly) }));
       setBudgetModalVisible(false);
     } else {
       Alert.alert("Error", "Please fill in all budget fields.");
@@ -83,50 +56,7 @@ export default function ProfileScreen() {
             {getInitials(user)}
           </Text>
         </View>
-        <View style={styles.card}>
-          <View style={styles.rowBetween}>
-            <Text textType="baseRegularBold">Name:</Text>
-            <TouchableOpacity onPress={() => setEditing(true)}>
-              <Text textType="link">Edit</Text>
-            </TouchableOpacity>
-          </View>
-          {editing ? (
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              style={styles.input}
-              placeholder="Enter new name"
-            />
-          ) : (
-            <Text textType="baseRegular">{user?.name}</Text>
-          )}
-          {editing && (
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSaveName}
-            >
-              {loading ? (
-                <ActivityIndicator color={colors.ivory} />
-              ) : (
-                <Text textType="baseRegularBold" style={styles.saveButtonText}>
-                  Save Name
-                </Text>
-              )}
-            </TouchableOpacity>
-          )}
-          <Text textType="baseRegularBold" style={styles.label}>
-            Email:
-          </Text>
-          <Text textType="baseRegular">{user?.email}</Text>
-          <Text textType="baseRegularBold" style={styles.label}>
-            Wallet Balance:
-          </Text>
-          <Text textType="baseRegular">₹{user?.balance ?? 0}</Text>
-          <Text textType="baseRegularBold" style={styles.label}>
-            Total Transactions:
-          </Text>
-          <Text textType="baseRegular">{transactions?.length ?? 0}</Text>
-        </View>
+        <ProfileDetailsCard />
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.green }]}
           onPress={() => setBudgetModalVisible(true)}
@@ -147,12 +77,8 @@ export default function ProfileScreen() {
       <BudgetModal
         visible={budgetModalVisible}
         onClose={() => setBudgetModalVisible(false)}
-        daily={daily}
-        weekly={weekly}
-        monthly={monthly}
-        setDaily={setDaily}
-        setWeekly={setWeekly}
-        setMonthly={setMonthly}
+        budgets={budgetsState}
+        setBudgets={setBudgetsState}
         onSave={handleSaveBudget}
       />
     </>
