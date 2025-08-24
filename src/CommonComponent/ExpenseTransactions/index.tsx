@@ -4,21 +4,31 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../Theme/Color";
 import styles from "./style";
 import { Transaction } from "../../types";
+import { formatCurrency, formatDate } from "../../utils/utils";
+import SkeletonView from "../skeletonView";
 
 interface ExpenseTransactionsProps {
   filteredExpenses: Transaction[];
   handleLongPress: (id: string) => void;
+  loading: boolean;
 }
 export default function ExpenseTransactions({
   filteredExpenses,
   handleLongPress,
+  loading,
 }: ExpenseTransactionsProps) {
   return (
     <>
       <Text textType="mediumSemiBold" style={styles.transactionTitle}>
         Recent Transactions
       </Text>
-      {filteredExpenses.length === 0 ? (
+      {loading ? (
+        <>
+          <SkeletonView />
+          <SkeletonView />
+          <SkeletonView />
+        </>
+      ) : filteredExpenses.length === 0 ? (
         <View style={styles.emptyState}>
           <MaterialCommunityIcons
             name="file-document-outline"
@@ -43,7 +53,8 @@ export default function ExpenseTransactions({
                   {item.category || "Uncategorized"}
                 </Text>
                 <Text style={styles.transactionMeta}>
-                  {item.date} • {item.note?.trim() ? item.note : "(No Note)"}{" "}
+                  {formatDate(item.date)} •{" "}
+                  {item.note?.trim() ? item.note : "(No Note)"}{" "}
                   {item.type === "send"
                     ? item.to?.trim()
                       ? `• To: ${item.to}`
@@ -59,8 +70,8 @@ export default function ExpenseTransactions({
                   },
                 ]}
               >
-                {item.type === "add" ? "+" : "-"}₹
-                {Number(item.amount).toLocaleString("en-IN")}
+                {item.type === "add" ? "+" : "-"}
+                {formatCurrency(item.amount)}
               </Text>
             </TouchableOpacity>
           ))}

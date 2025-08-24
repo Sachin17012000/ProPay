@@ -16,65 +16,6 @@ export default StyleSheet.create({
   title: {
     color: colors.black,
   },
-  expenseSummaryHeader: {
-    flexDirection: "row",
-  },
-  chartBarIconStyle: {
-    padding: 2,
-    backgroundColor: colors.emerald,
-    borderRadius: 4,
-    marginRight: 8,
-  },
-  toggleSection: {
-    flexDirection: "row",
-    marginTop: 20,
-    borderColor: colors.ash,
-    borderWidth: 1,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  toggleTitle: {
-    flex: 1,
-    borderColor: colors.ash,
-    alignItems: "center",
-    paddingVertical: 5,
-  },
-  activeToggle: {
-    backgroundColor: colors.blue,
-    borderRadius: 10,
-  },
-  toggleButtonText: {
-    color: colors.black,
-  },
-  activeToggleButtonText: {
-    color: colors.ivory,
-  },
-  summarySection: {
-    marginTop: 20,
-    backgroundColor: colors.offWhite,
-    borderRadius: 10,
-    padding: 15,
-  },
-  summaryLine: {
-    color: colors.black,
-    marginBottom: 5,
-  },
-  progressBarBackground: {
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: colors.silver,
-    marginTop: 10,
-    overflow: "hidden",
-  },
-  progressBarFill: {
-    height: "100%",
-    backgroundColor: colors.blue,
-    borderRadius: 5,
-  },
-  percentUsedText: {
-    marginTop: 5,
-    color: colors.grey,
-  },
   categoryTitle: {
     marginTop: 25,
     marginBottom: 10,
@@ -99,48 +40,6 @@ export default StyleSheet.create({
   categoryAmount: {
     color: colors.grey,
   },
-  transactionTitle: {
-    marginTop: 24,
-    marginBottom: 8,
-    color: colors.black,
-  },
-  transactionList: {
-    paddingBottom: 60,
-  },
-  transactionItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    backgroundColor: colors.offWhite,
-    borderRadius: 12,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  transactionInfo: {
-    flex: 1,
-    marginRight: 12,
-  },
-  transactionCategory: {
-    marginBottom: 2,
-  },
-  transactionMeta: {
-    color: colors.noteGrey,
-  },
-  emptyState: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 40,
-  },
-  emptyText: {
-    marginTop: 10,
-    color: colors.grey,
-  },
   fabButton: {
     position: "absolute",
     bottom: 30,
@@ -156,13 +55,5 @@ export default StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 5,
-  },
-  budgetButton: {
-    marginTop: 5,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: colors.blue,
-    alignSelf: "flex-start",
   },
 });

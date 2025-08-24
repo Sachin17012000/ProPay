@@ -19,6 +19,7 @@ import { updateUserThunk } from "../../store/features/user/userThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createTransaction } from "../../store/features/transactions/transactionThunk";
 import colors from "../../CommonComponent/Theme/Color";
+import { formatCurrency } from "../../utils/utils";
 
 const schema = yup.object().shape({
   amount: yup
@@ -100,7 +101,7 @@ export default function AddMoneyScreen() {
         Add Money
       </Text>
       <Text textType="baseRegularBold" style={styles.balanceLabel}>
-        Wallet Balance: ₹{user.balance}
+        Wallet Balance: {formatCurrency(user.balance)}
       </Text>
       <Input
         placeholder="Enter amount"

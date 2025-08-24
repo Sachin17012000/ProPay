@@ -1,4 +1,10 @@
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -7,7 +13,11 @@ import colors from "../../CommonComponent/Theme/Color";
 import { AddExpenseModal } from "../../CommonComponent/AddExpenseModal";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { RootState } from "../../store/store";
-import { getCategoryIcon, getDateFilteredExpenses } from "../../utils/utils";
+import {
+  formatCurrency,
+  getCategoryIcon,
+  getDateFilteredExpenses,
+} from "../../utils/utils";
 import {
   addExpense,
   deleteExpense,
@@ -16,6 +26,7 @@ import {
 import BudgetModal from "../../CommonComponent/BudgetModal";
 import ExpenseDetails from "../../CommonComponent/ExpenseDetails";
 import ExpenseTransactions from "../../CommonComponent/ExpenseTransactions";
+import SkeletonView from "../../CommonComponent/skeletonView";
 
 export default function ExpenseTracker() {
   const dispatch = useAppDispatch();
@@ -33,6 +44,7 @@ export default function ExpenseTracker() {
   const [activeTab, setActiveTab] = useState("Monthly");
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [daily, setDaily] = useState(
     budgets.find((b) => b.period === "Daily")?.amount.toString() ?? ""
@@ -109,9 +121,19 @@ export default function ExpenseTracker() {
         : [{ text: "OK" }]
     );
   };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  };
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.headerView}>
           <Text textType="mediumSemiBold" style={styles.title}>
             Expense Tracker
@@ -123,53 +145,60 @@ export default function ExpenseTracker() {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           setBudgetModalVisible={setBudgetModalVisible}
+          loading={refreshing}
         />
+
         {categoryTotals.length > 0 && (
           <View>
             <Text textType="mediumSemiBold" style={styles.categoryTitle}>
               Category Breakdown
             </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoryScrollView}
-              style={{ maxHeight: 100 }}
-            >
-              {categoryTotals.map((category) => (
-                <TouchableOpacity
-                  key={category.name}
-                  style={[
-                    styles.categoryCard,
-                    selectedCategory === category.name && {
-                      backgroundColor: colors.blue + "20",
-                    },
-                  ]}
-                  onPress={() => {
-                    setSelectedCategory((prev) =>
-                      prev === category.name ? null : category.name
-                    );
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={category.icon as any}
-                    size={24}
-                    color={colors.blue}
-                    style={{ marginBottom: 4 }}
-                  />
-                  <Text textType="baseSemiBold" style={styles.categoryText}>
-                    {category.name}
-                  </Text>
-                  <Text textType="smallRegular" style={styles.categoryAmount}>
-                    ₹{category.amount}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            {refreshing ? (
+              <SkeletonView />
+            ) : (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryScrollView}
+                style={{ maxHeight: 100 }}
+              >
+                {categoryTotals.map((category) => (
+                  <TouchableOpacity
+                    key={category.name}
+                    style={[
+                      styles.categoryCard,
+                      selectedCategory === category.name && {
+                        backgroundColor: colors.blue + "20",
+                      },
+                    ]}
+                    onPress={() => {
+                      setSelectedCategory((prev) =>
+                        prev === category.name ? null : category.name
+                      );
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={category.icon as any}
+                      size={24}
+                      color={colors.blue}
+                      style={{ marginBottom: 4 }}
+                    />
+                    <Text textType="baseSemiBold" style={styles.categoryText}>
+                      {category.name}
+                    </Text>
+                    <Text textType="smallRegular" style={styles.categoryAmount}>
+                      {formatCurrency(category.amount)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
           </View>
         )}
         <ExpenseTransactions
           handleLongPress={handleLongPress}
           filteredExpenses={filteredExpenses}
+          loading={refreshing}
         />
       </ScrollView>
       <AddExpenseModal

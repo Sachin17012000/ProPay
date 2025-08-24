@@ -11,6 +11,9 @@ import { forgotPasswordThunk } from "../../store/features/user/userThunk";
 import { clearRetrievedPassword } from "../../store/features/user/userSlice";
 import colors from "../../CommonComponent/Theme/Color";
 
+type ForgotPasswordFormValues = {
+  email: string;
+};
 const ForgotPassword = () => {
   const dispatch = useAppDispatch();
 
@@ -18,16 +21,16 @@ const ForgotPassword = () => {
   const retrievedPassword = useAppSelector(
     (state) => state.user.retrievedPassword
   );
-  const error = useAppSelector((state) => state.user.error);
 
   const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(forgotPasswordSchema) });
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: yupResolver(forgotPasswordSchema),
+  });
 
   const onSubmit = async (data) => {
     const resultAction = await dispatch(

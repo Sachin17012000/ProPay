@@ -13,6 +13,8 @@ import { Transaction } from "../../types";
 import CategoryModal from "../../CommonComponent/CategoryModal";
 import styles from "./style";
 import colors from "../../CommonComponent/Theme/Color";
+import { formatCurrency, formatDate } from "../../utils/utils";
+import SkeletonView from "../../CommonComponent/skeletonView";
 
 type FilterType = "all" | "send" | "add";
 
@@ -100,6 +102,13 @@ export default function TransactionsScreen() {
         <Text textType="baseRegular" style={styles.emptyMessage}>
           No {filter} transactions found.
         </Text>
+      ) : refreshing ? (
+        <>
+          <SkeletonView />
+          <SkeletonView />
+          <SkeletonView />
+          <SkeletonView />
+        </>
       ) : (
         <FlatList
           data={filteredTransactions}
@@ -136,14 +145,15 @@ export default function TransactionsScreen() {
                     },
                   ]}
                 >
-                  {txn.type === "add" ? "+ " : "- "}₹{txn.amount}
+                  {txn.type === "add" ? "+ " : "- "}
+                  {formatCurrency(txn.amount)}
                 </Text>
               </View>
 
               <View style={styles.rowBetween}>
                 <View style={styles.dateCategoryView}>
                   <Text textType="smallRegular" style={styles.transactionDate}>
-                    {txn.date}
+                    {formatDate(txn.date)}
                   </Text>
                 </View>
                 {txn.note && (

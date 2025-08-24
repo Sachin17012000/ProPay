@@ -1,9 +1,10 @@
 import { TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Text from "../Text";
-import { getToggleTitle } from "../../utils/utils";
+import { formatCurrency, getToggleTitle } from "../../utils/utils";
 import { toggleArray } from "../../utils/staticData";
 import styles from "./style";
+import SkeletonView from "../skeletonView";
 
 interface ExpenseDetailsProps {
   selectedBudget: number;
@@ -11,6 +12,7 @@ interface ExpenseDetailsProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   setBudgetModalVisible: (visible: boolean) => void;
+  loading: boolean;
 }
 export default function ExpenseDetails({
   selectedBudget,
@@ -18,6 +20,7 @@ export default function ExpenseDetails({
   activeTab,
   setActiveTab,
   setBudgetModalVisible,
+  loading,
 }: ExpenseDetailsProps) {
   const percentUsed = selectedBudget
     ? Math.min((totalSpent / selectedBudget) * 100, 100)
@@ -56,31 +59,35 @@ export default function ExpenseDetails({
           </TouchableOpacity>
         ))}
       </View>
-      <View style={styles.summarySection}>
-        <Text textType="semiRegular" style={styles.summaryLine}>
-          Total Spent: ₹{totalSpent}
-        </Text>
-        <Text textType="semiRegular" style={styles.summaryLine}>
-          Budget: ₹{selectedBudget}
-        </Text>
-        <Text textType="semiRegular" style={styles.summaryLine}>
-          Remaining: ₹{selectedBudget - totalSpent}
-        </Text>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: `${percentUsed}%` }]}
-          />
+      {loading ? (
+        <SkeletonView CardStyle={{ marginTop: 20, height: 165 }} />
+      ) : (
+        <View style={styles.summarySection}>
+          <Text textType="semiRegular" style={styles.summaryLine}>
+            Total Spent: {formatCurrency(totalSpent)}
+          </Text>
+          <Text textType="semiRegular" style={styles.summaryLine}>
+            Budget: {formatCurrency(selectedBudget)}
+          </Text>
+          <Text textType="semiRegular" style={styles.summaryLine}>
+            Remaining: {formatCurrency(selectedBudget - totalSpent)}
+          </Text>
+          <View style={styles.progressBarBackground}>
+            <View
+              style={[styles.progressBarFill, { width: `${percentUsed}%` }]}
+            />
+          </View>
+          <Text textType="smallRegular" style={styles.percentUsedText}>
+            {percentUsed.toFixed(0)}% Used
+          </Text>
+          <TouchableOpacity
+            style={styles.budgetButton}
+            onPress={() => setBudgetModalVisible(true)}
+          >
+            <Text style={{ color: "white" }}>Set Budget</Text>
+          </TouchableOpacity>
         </View>
-        <Text textType="smallRegular" style={styles.percentUsedText}>
-          {percentUsed.toFixed(0)}% Used
-        </Text>
-        <TouchableOpacity
-          style={styles.budgetButton}
-          onPress={() => setBudgetModalVisible(true)}
-        >
-          <Text style={{ color: "white" }}>Set Budget</Text>
-        </TouchableOpacity>
-      </View>
+      )}
     </>
   );
 }

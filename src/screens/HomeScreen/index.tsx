@@ -1,6 +1,6 @@
-import { Animated } from "react-native";
-import { useEffect, useRef } from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import { Animated, RefreshControl } from "react-native";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { View, ScrollView } from "react-native";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { fetchTransactionsByUser } from "../../store/features/transactions/transactionThunk";
 import { FeatureButton } from "../../CommonComponent/FeatureButton";
 import colors from "../../CommonComponent/Theme/Color";
+import { formatCurrency, formatDate } from "../../utils/utils";
+import HomeScreenTransactions from "../../CommonComponent/HomeScreenTransactions";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
@@ -21,6 +23,8 @@ export default function HomeScreen() {
   const loading = useAppSelector((state) => state.transactions.loading);
   const error = useAppSelector((state) => state.transactions.error);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -29,21 +33,53 @@ export default function HomeScreen() {
     }
   }, [dispatch, user?.id]);
 
-  useEffect(() => {
+  const runBalanceAnimation = () => {
+    fadeAnim.setValue(0);
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 800,
+      duration: 1500,
       useNativeDriver: true,
     }).start();
+  };
+
+  useEffect(() => {
+    runBalanceAnimation();
   }, []);
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    runBalanceAnimation();
+    if (user?.id) {
+      await dispatch(fetchTransactionsByUser(user.id));
+    }
+    setRefreshing(false);
+  }, [dispatch, user?.id]);
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Text textType="baseMediumBold" style={styles.greeting}>
         Welcome back, {user.name} 👋
       </Text>
       <Animated.View
-        style={{ borderRadius: 20, marginBottom: 24, overflow: "hidden" }}
+        style={[
+          styles.balanceAnimationStyle,
+          {
+            opacity: fadeAnim,
+            transform: [
+              {
+                translateY: fadeAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [30, 0],
+                }),
+              },
+            ],
+          },
+        ]}
       >
         <LinearGradient
           colors={[colors.steelBlue, colors.emerald]}
@@ -55,10 +91,10 @@ export default function HomeScreen() {
             Wallet Balance
           </Text>
           <Text textType="headingBold" style={styles.balanceAmount}>
-            ₹{user?.balance ?? 0}
+            {formatCurrency(user?.balance ?? 0)}
           </Text>
           <Text textType="smallRegular" style={styles.lastUpdated}>
-            Updated: {new Date().toLocaleDateString()}
+            Updated: {formatDate(new Date().toISOString())}
           </Text>
         </LinearGradient>
       </Animated.View>
@@ -90,64 +126,11 @@ export default function HomeScreen() {
           color={colors.purple}
         />
       </View>
-      <Text textType="mediumSemiBold" style={styles.sectionTitle}>
-        {loading
-          ? "Loading transactions..."
-          : transactions.length === 0
-          ? "Start Using App to Get Transactions"
-          : "Recent Transactions"}
-      </Text>
-      {error && (
-        <Text textType="mediumSemiBold" style={styles.sectionTitle}>
-          {error}
-        </Text>
-      )}
-      {!loading &&
-        transactions.slice(0, 4).map((transaction) => (
-          <View key={transaction.id} style={styles.transactionCard}>
-            <View style={styles.rowBetween}>
-              <Text textType="baseRegular" style={styles.transactionName}>
-                {transaction.type === "send"
-                  ? `Sent to ${transaction.to ?? "Unknown"}`
-                  : `Added to Wallet`}
-              </Text>
-              <Text
-                textType="baseRegularBold"
-                style={[
-                  styles.transactionAmount,
-                  {
-                    color:
-                      transaction.type === "add"
-                        ? colors.emerald
-                        : colors.dangerRed,
-                  },
-                ]}
-              >
-                {transaction.type === "add" ? "+ " : "- "}₹{transaction.amount}
-              </Text>
-            </View>
-            <View style={styles.rowBetween}>
-              <Text textType="smallRegular" style={styles.transactionDate}>
-                {transaction.date}
-              </Text>
-              {transaction.note && (
-                <Text textType="smallRegular" style={styles.transactionNote}>
-                  Note: {transaction.note}
-                </Text>
-              )}
-            </View>
-          </View>
-        ))}
-      {!loading && transactions.length > 4 && (
-        <TouchableOpacity
-          style={styles.viewAllButton}
-          onPress={() => navigation.navigate("Transactions")}
-        >
-          <Text textType="baseRegularBold" style={styles.viewAllButtonText}>
-            View All Transactions →
-          </Text>
-        </TouchableOpacity>
-      )}
+      <HomeScreenTransactions
+        loading={loading}
+        transactions={transactions}
+        error={error}
+      />
     </ScrollView>
   );
 }

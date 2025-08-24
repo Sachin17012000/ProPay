@@ -31,7 +31,7 @@ export default function RegisterScreen() {
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
   });
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: RegisterFormData) => {
     const result = await dispatch(
       registerThunk({
         name: data.name,

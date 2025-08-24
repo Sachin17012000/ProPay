@@ -19,6 +19,7 @@ import { updateUserThunk } from "../../store/features/user/userThunk";
 import { createTransaction } from "../../store/features/transactions/transactionThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import colors from "../../CommonComponent/Theme/Color";
+import { formatCurrency } from "../../utils/utils";
 
 type FormData = {
   to: string;
@@ -95,7 +96,7 @@ export default function SendMoneyScreen() {
           Send Money
         </Text>
         <Text textType="baseRegularBold" style={styles.balanceLabel}>
-          Wallet Balance: ₹{user.balance}
+          Wallet Balance: {formatCurrency(user.balance)}
         </Text>
         <Input
           name="to"

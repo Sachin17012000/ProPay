@@ -56,7 +56,14 @@ export default function BudgetModal({
                   placeholder="Enter amount"
                   keyboardType="numeric"
                   value={daily}
-                  onChangeText={setDaily}
+                  onChangeText={(text) => {
+                    const sanitized = text.replace(/[^0-9]/g, "");
+                    if (sanitized === "" || sanitized === "0") {
+                      setDaily("");
+                    } else {
+                      setDaily(sanitized);
+                    }
+                  }}
                   style={styles.input}
                 />
               </View>
@@ -68,7 +75,16 @@ export default function BudgetModal({
                   placeholder="Enter amount"
                   keyboardType="numeric"
                   value={weekly}
-                  onChangeText={setWeekly}
+                  onChangeText={(text) => {
+                    // Remove non-digit characters
+                    const sanitized = text.replace(/[^0-9]/g, "");
+                    // Ensure it’s not "0"
+                    if (sanitized === "" || sanitized === "0") {
+                      setWeekly("");
+                    } else {
+                      setWeekly(sanitized);
+                    }
+                  }}
                   style={styles.input}
                 />
               </View>
@@ -80,7 +96,16 @@ export default function BudgetModal({
                   placeholder="Enter amount"
                   keyboardType="numeric"
                   value={monthly}
-                  onChangeText={setMonthly}
+                  onChangeText={(text) => {
+                    // Remove non-digit characters
+                    const sanitized = text.replace(/[^0-9]/g, "");
+                    // Ensure it’s not "0"
+                    if (sanitized === "" || sanitized === "0") {
+                      setMonthly("");
+                    } else {
+                      setMonthly(sanitized);
+                    }
+                  }}
                   style={styles.input}
                 />
               </View>
