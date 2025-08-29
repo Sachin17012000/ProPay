@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { candleToDayData } from "../../../utils/utils";
 
 interface DayData {
   date: string;
@@ -43,6 +44,9 @@ const calendarSlice = createSlice({
         state.daysData[day.date] = day;
       });
     },
+    resetSelectedDate: (state) => {
+      state.selectedDate = null;
+    },
     generateMockData: (state) => {
       const daysInMonth = new Date(
         state.currentYear,
@@ -67,11 +71,21 @@ const calendarSlice = createSlice({
   },
 });
 
+export const populateDaysFromCandles = createAsyncThunk(
+  "calendar/populateDaysFromCandles",
+  async (_, { dispatch, getState }) => {
+    const candlesSlice: any = (getState() as any).candles;
+    const dayDataArray = Object.values(candlesSlice.data).map(candleToDayData);
+    dispatch(setBulkDayData(dayDataArray));
+  }
+);
+
 export const {
   setMonthYear,
   selectDate,
   setDayData,
   setBulkDayData,
   generateMockData,
+  resetSelectedDate,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;

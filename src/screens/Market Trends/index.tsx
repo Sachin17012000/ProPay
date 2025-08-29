@@ -1,25 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import Calendar from "../../CommonComponent/Calendar";
 import styles from "./style";
 import { formatDate } from "../../utils/utils";
+import { useAppDispatch } from "../../hooks/hook";
+import { fetchDailyCandles } from "../../store/features/orderbook/candlesSlice";
+import {
+  populateDaysFromCandles,
+  resetSelectedDate,
+} from "../../store/features/calendar/calendarSlice";
+import { useFocusEffect } from "@react-navigation/native";
+
 const MarketTrends = () => {
+  const dispatch = useAppDispatch();
   const { selectedDate, daysData } = useSelector(
     (state: RootState) => state.calendar
   );
   const [modalVisible, setModalVisible] = useState(false);
   const dayData = selectedDate ? daysData[selectedDate] : null;
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(resetSelectedDate());
+    }, [dispatch])
+  );
   useEffect(() => {
-    if (selectedDate) {
-      setModalVisible(true);
-    }
-  }, [selectedDate]);
+    dispatch(fetchDailyCandles()).then(() => {
+      dispatch(populateDaysFromCandles());
+    });
+  }, [dispatch]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Market Seasonality Explorer</Text>
-      <Calendar />
+      <Calendar onDatePress={() => setModalVisible(true)} />
       <Modal
         visible={modalVisible}
         transparent={true}

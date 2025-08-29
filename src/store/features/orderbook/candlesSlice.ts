@@ -11,7 +11,7 @@ interface Candle {
 }
 
 interface CandlesState {
-  data: Record<string, Candle>; // key: date string
+  data: Record<string, Candle>;
   loading: boolean;
   error: string | null;
 }

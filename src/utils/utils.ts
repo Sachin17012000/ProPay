@@ -1,5 +1,5 @@
 import colors from "../CommonComponent/Theme/Color";
-import { Transaction, User } from "../types";
+import { DayData, Transaction, User } from "../types";
 
 const allowedUserIds = [
   "user001",
@@ -99,4 +99,21 @@ export const getVolatilityColor = (volatility: number) => {
   if (volatility < 33) return colors.green;
   if (volatility < 66) return colors.yellow;
   return colors.crimson;
+};
+export const candleToDayData = (candle: any): DayData => {
+  const d = new Date(candle.openTime);
+  const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(d.getDate()).padStart(2, "0")}`;
+  const open = candle.open;
+  const close = candle.close;
+  const high = candle.high;
+  const low = candle.low;
+  const volume = candle.volume;
+
+  const performance = Number((((close - open) / open) * 100).toFixed(2));
+  const volatility = Number((((high - low) / open) * 100).toFixed(2));
+  const liquidity = Number(volume.toFixed(2));
+  return { date, volatility, liquidity, performance };
 };

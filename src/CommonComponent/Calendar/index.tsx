@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Text from "../Text";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {
-  generateMockData,
   selectDate,
   setMonthYear,
 } from "../../store/features/calendar/calendarSlice";
@@ -14,15 +13,11 @@ import { getVolatilityColor } from "../../utils/utils";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const Calendar = () => {
+const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
   const dispatch = useAppDispatch();
   const { currentMonth, currentYear, selectedDate, daysData } = useSelector(
     (state: RootState) => state.calendar
   );
-
-  useEffect(() => {
-    dispatch(generateMockData());
-  }, [currentMonth, currentYear]);
 
   const today = new Date();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -52,7 +47,14 @@ const Calendar = () => {
   };
 
   const handleSelectDate = (date: Date) => {
-    dispatch(selectDate(date.toISOString().split("T")[0]));
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const localDateStr = `${year}-${month}-${day}`;
+    dispatch(selectDate(localDateStr));
+    if (onDatePress) {
+      onDatePress();
+    }
   };
 
   return (
@@ -85,8 +87,10 @@ const Calendar = () => {
           if (!date) {
             return <View key={idx} style={[styles.dayCell]} />;
           }
-
-          const dateStr = date.toISOString().split("T")[0];
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          const dateStr = `${year}-${month}-${day}`;
           const dayData = daysData[dateStr];
 
           const isToday =

@@ -38,3 +38,9 @@ export type RegisterFormData = {
   password: string;
   confirmPassword: string;
 };
+export interface DayData {
+  date: string;
+  volatility: number;
+  liquidity: number;
+  performance: number;
+}
