@@ -14,3 +14,4 @@ export const toggleArray = [
   { title: "Monthly" },
 ];
 export const budgetArray = ["Daily", "Weekly", "Monthly"] as const;
+export const instruments = ["Crypto", "Gold", "Silver", "USD"];

@@ -13,6 +13,7 @@ interface CalendarState {
   currentYear: number;
   selectedDate: string | null;
   daysData: Record<string, DayData>;
+  timeframe: "day" | "week" | "month";
 }
 
 const initialState: CalendarState = {
@@ -20,6 +21,7 @@ const initialState: CalendarState = {
   currentYear: new Date().getFullYear(),
   selectedDate: null,
   daysData: {},
+  timeframe: "day",
 };
 
 const calendarSlice = createSlice({
@@ -38,6 +40,9 @@ const calendarSlice = createSlice({
     },
     setDayData: (state, action: PayloadAction<DayData>) => {
       state.daysData[action.payload.date] = action.payload;
+    },
+    setTimeframe: (state, action: PayloadAction<"day" | "week" | "month">) => {
+      state.timeframe = action.payload;
     },
     setBulkDayData: (state, action: PayloadAction<DayData[]>) => {
       action.payload.forEach((day) => {
@@ -87,5 +92,6 @@ export const {
   setBulkDayData,
   generateMockData,
   resetSelectedDate,
+  setTimeframe,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;

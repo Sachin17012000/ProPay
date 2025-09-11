@@ -13,9 +13,18 @@ import { getVolatilityColor } from "../../utils/utils";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
+interface CalendarProps {
+  onDatePress?: () => void;
+  daysData?: Record<
+    string,
+    { volatility: number; performance: number; liquidity: number }
+  >;
+  timeframe?: "day" | "week" | "month";
+}
+
+const Calendar = ({ onDatePress, daysData = {} }: CalendarProps) => {
   const dispatch = useAppDispatch();
-  const { currentMonth, currentYear, selectedDate, daysData } = useSelector(
+  const { currentMonth, currentYear, selectedDate } = useSelector(
     (state: RootState) => state.calendar
   );
 
@@ -27,12 +36,9 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
   const startDay = firstDayOfMonth.getDay();
 
   const calendarDays: (Date | null)[] = [];
-  for (let i = 0; i < startDay; i++) {
-    calendarDays.push(null);
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
+  for (let i = 0; i < startDay; i++) calendarDays.push(null);
+  for (let d = 1; d <= daysInMonth; d++)
     calendarDays.push(new Date(currentYear, currentMonth, d));
-  }
 
   const handlePrevMonth = () => {
     const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -50,11 +56,9 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    const localDateStr = `${year}-${month}-${day}`;
-    dispatch(selectDate(localDateStr));
-    if (onDatePress) {
-      onDatePress();
-    }
+    const dateStr = `${year}-${month}-${day}`;
+    dispatch(selectDate(dateStr));
+    if (onDatePress) onDatePress();
   };
 
   return (
@@ -75,6 +79,7 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
           </Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.weekRow}>
         {daysOfWeek.map((day) => (
           <Text key={day} style={styles.weekDay}>
@@ -82,15 +87,16 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
           </Text>
         ))}
       </View>
+
       <View style={styles.grid}>
         {calendarDays.map((date, idx) => {
-          if (!date) {
-            return <View key={idx} style={[styles.dayCell]} />;
-          }
+          if (!date) return <View key={idx} style={styles.dayCell} />;
+
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
           const dateStr = `${year}-${month}-${day}`;
+
           const dayData = daysData[dateStr];
 
           const isToday =
@@ -99,6 +105,7 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
             date.getFullYear() === today.getFullYear();
 
           const isSelected = selectedDate === dateStr;
+
           return (
             <TouchableOpacity
               key={idx}
@@ -109,13 +116,12 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
                 },
                 isToday && styles.todayCell,
                 isSelected && styles.selectedCell,
+                !dayData && { opacity: 0.3 },
               ]}
-              disabled={!date}
-              onPress={() => date && handleSelectDate(date)}
+              onPress={() => dayData && handleSelectDate(date)}
             >
-              <Text textType="semiRegular" style={[!date && styles.emptyText]}>
-                {date ? date.getDate() : ""}
-              </Text>
+              <Text textType="semiRegular">{date.getDate()}</Text>
+
               {dayData && (
                 <View
                   style={{
@@ -127,13 +133,9 @@ const Calendar = ({ onDatePress }: { onDatePress?: () => void }) => {
                   }}
                 />
               )}
+
               {dayData && (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: colors.black,
-                  }}
-                >
+                <Text style={{ fontSize: 12, color: colors.black }}>
                   {dayData.performance >= 0 ? "↑" : "↓"}
                 </Text>
               )}
@@ -171,7 +173,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: colors.lightGray,
   },
-  emptyText: { color: "transparent" },
   todayCell: { backgroundColor: colors.mint },
   selectedCell: { backgroundColor: colors.greyMint },
 });
