@@ -5,7 +5,6 @@ import expensesReducer from "./features/expenseTracker/expenseSlice";
 import calendarReducer from "./features/calendar/calendarSlice";
 import orderbookReducer from "./features/orderbook/orderbookSlice";
 import candlesReducer from "./features/orderbook/candlesSlice";
-import metalReducer from "./features/metal/metalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +14,6 @@ export const store = configureStore({
     calendar: calendarReducer,
     orderbook: orderbookReducer,
     candles: candlesReducer,
-    metals: metalReducer,
   },
 });
 

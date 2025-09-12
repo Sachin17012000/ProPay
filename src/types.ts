@@ -43,4 +43,5 @@ export interface DayData {
   volatility: number;
   liquidity: number;
   performance: number;
+  price: number;
 }

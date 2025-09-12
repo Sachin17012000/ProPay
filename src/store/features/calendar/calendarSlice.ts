@@ -6,6 +6,7 @@ interface DayData {
   volatility: number;
   liquidity: number;
   performance: number;
+  price: number;
 }
 
 interface CalendarState {
@@ -52,27 +53,6 @@ const calendarSlice = createSlice({
     resetSelectedDate: (state) => {
       state.selectedDate = null;
     },
-    generateMockData: (state) => {
-      const daysInMonth = new Date(
-        state.currentYear,
-        state.currentMonth + 1,
-        0
-      ).getDate();
-      const mock: DayData[] = [];
-      for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = new Date(state.currentYear, state.currentMonth, d)
-          .toISOString()
-          .split("T")[0];
-        mock.push({
-          date: dateStr,
-          volatility: Math.floor(Math.random() * 100),
-          liquidity: Math.floor(Math.random() * 1000),
-          performance: Math.floor(Math.random() * 21) - 10,
-        });
-      }
-      state.daysData = {};
-      mock.forEach((day) => (state.daysData[day.date] = day));
-    },
   },
 });
 
@@ -80,7 +60,11 @@ export const populateDaysFromCandles = createAsyncThunk(
   "calendar/populateDaysFromCandles",
   async (_, { dispatch, getState }) => {
     const candlesSlice: any = (getState() as any).candles;
-    const dayDataArray = Object.values(candlesSlice.data).map(candleToDayData);
+
+    const dayDataArray = await Promise.all(
+      Object.values(candlesSlice.data).map(candleToDayData)
+    );
+
     dispatch(setBulkDayData(dayDataArray));
   }
 );
@@ -90,8 +74,8 @@ export const {
   selectDate,
   setDayData,
   setBulkDayData,
-  generateMockData,
   resetSelectedDate,
   setTimeframe,
 } = calendarSlice.actions;
+
 export default calendarSlice.reducer;

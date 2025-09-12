@@ -82,11 +82,11 @@ export const getToggleTitle = (activeTab: string) => {
   if (activeTab === "Weekly") return "Week";
   return "Month";
 };
-export const formatCurrency = (amount: number) =>
+export const formatCurrency = (amount: number, decimal?: number) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
-    maximumFractionDigits: 0,
+    maximumFractionDigits: decimal ? decimal : 0,
   }).format(amount);
 
 export const formatDate = (dateString: string) =>
@@ -100,12 +100,15 @@ export const getVolatilityColor = (volatility: number) => {
   if (volatility < 66) return colors.yellow;
   return colors.crimson;
 };
-export const candleToDayData = (candle: any): DayData => {
+export const candleToDayData = async (candle: any): Promise<DayData> => {
+  const usdInrRates = await getUsdInrRates();
+
   const d = new Date(candle.openTime);
   const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
     2,
     "0"
   )}-${String(d.getDate()).padStart(2, "0")}`;
+
   const open = candle.open;
   const close = candle.close;
   const high = candle.high;
@@ -115,5 +118,38 @@ export const candleToDayData = (candle: any): DayData => {
   const performance = Number((((close - open) / open) * 100).toFixed(2));
   const volatility = Number((((high - low) / open) * 100).toFixed(2));
   const liquidity = Number(volume.toFixed(2));
-  return { date, volatility, liquidity, performance };
+
+  const usdInr = usdInrRates[date]?.INR;
+
+  const rate = usdInr ?? getNearestRate(usdInrRates, date);
+
+  const price = close * rate;
+
+  return { date, volatility, liquidity, performance, price };
 };
+
+export async function getUsdInrRates() {
+  const today = new Date();
+  const end = today.toISOString().split("T")[0];
+  const start = new Date(today);
+  start.setMonth(start.getMonth() - 4);
+  const startStr = start.toISOString().split("T")[0];
+
+  const res = await fetch(
+    `https://api.frankfurter.dev/v1/${startStr}..${end}?base=USD&symbols=INR`
+  );
+  const data = await res.json();
+  return data.rates;
+}
+
+function getNearestRate(
+  rates: Record<string, { INR: number }>,
+  date: string
+): number {
+  const dates = Object.keys(rates).sort();
+  let nearest = dates[0];
+  for (const d of dates) {
+    if (d <= date) nearest = d;
+  }
+  return rates[nearest].INR;
+}
