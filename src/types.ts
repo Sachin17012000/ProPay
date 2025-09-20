@@ -44,4 +44,7 @@ export interface DayData {
   liquidity: number;
   performance: number;
   price: number;
+  end_price?: number;
+  start_price?: number;
 }
+export type FilterType = "all" | "send" | "add";

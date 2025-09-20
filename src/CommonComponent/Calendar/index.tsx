@@ -19,13 +19,13 @@ interface CalendarProps {
     string,
     { volatility: number; performance: number; liquidity: number }
   >;
-  timeframe?: "day" | "week" | "month";
+  filter?: "btc" | "usd";
 }
 
 const Calendar = ({
   onDatePress,
   daysData = {},
-  timeframe = "day",
+  filter = "btc",
 }: CalendarProps) => {
   const dispatch = useAppDispatch();
   const { currentMonth, currentYear, selectedDate } = useSelector(
@@ -74,23 +74,33 @@ const Calendar = ({
         {calendarDays.map((date, idx) => {
           if (!date) return <View key={idx} style={styles.dayCell} />;
 
-          const dateStr = date.toISOString().split("T")[0];
-          const dayData = daysData[dateStr];
+          const dateStr = `${date.getFullYear()}-${String(
+            date.getMonth() + 1
+          ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
+          const dayData = daysData[dateStr];
           const isToday =
             date.getDate() === today.getDate() &&
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear();
           const isSelected = selectedDate === dateStr;
 
+          let bgColor = undefined;
+          if (dayData) {
+            if (filter === "usd") {
+              bgColor =
+                dayData.performance >= 0 ? colors.green : colors.crimson;
+            } else {
+              bgColor = getVolatilityColor(dayData.volatility);
+            }
+          }
+
           return (
             <TouchableOpacity
               key={idx}
               style={[
                 styles.dayCell,
-                dayData && {
-                  backgroundColor: getVolatilityColor(dayData.volatility),
-                },
+                dayData && { backgroundColor: bgColor },
                 isToday && styles.todayCell,
                 isSelected && styles.selectedCell,
                 !dayData && { opacity: 0.3 },
@@ -98,17 +108,6 @@ const Calendar = ({
               onPress={() => dayData && handleSelectKey(dateStr)}
             >
               <Text textType="semiRegular">{date.getDate()}</Text>
-              {dayData && (
-                <View
-                  style={{
-                    width: Math.min(20, dayData.liquidity / 50 + 5),
-                    height: Math.min(20, dayData.liquidity / 50 + 5),
-                    borderRadius: 50,
-                    backgroundColor: "rgba(0,0,0,0.4)",
-                    marginTop: 2,
-                  }}
-                />
-              )}
               {dayData && (
                 <Text style={{ fontSize: 12 }}>
                   {dayData.performance >= 0 ? "↑" : "↓"}
@@ -120,49 +119,6 @@ const Calendar = ({
       </View>
     </>
   );
-
-  const renderAggregatedView = (unit: "week" | "month") => {
-    const keys = Object.keys(daysData)
-      .filter((k) =>
-        unit === "week" ? k.includes("W") : /^\d{4}-\d{2}$/.test(k)
-      )
-      .sort();
-
-    return (
-      <View style={styles.gridWeekMonth}>
-        {keys.map((key) => {
-          const data = daysData[key];
-          const isSelected = selectedDate === key;
-          let label = key;
-          if (unit === "month") {
-            const [year, month] = key.split("-");
-            const date = new Date(Number(year), Number(month) - 1, 1);
-            label = date.toLocaleString("default", {
-              month: "short",
-              year: "numeric",
-            });
-          } else if (unit === "week") label = `W${key.split("-W")[1]}`;
-
-          return (
-            <TouchableOpacity
-              key={key}
-              style={[
-                styles.weekMonthCell,
-                { backgroundColor: getVolatilityColor(data.volatility) },
-                isSelected && styles.selectedCell,
-              ]}
-              onPress={() => handleSelectKey(key)}
-            >
-              <Text textType="semiRegular">{label}</Text>
-              <Text style={{ fontSize: 12 }}>
-                {data.performance >= 0 ? "↑" : "↓"}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -183,9 +139,7 @@ const Calendar = ({
         </TouchableOpacity>
       </View>
 
-      {timeframe === "day" && renderDayView()}
-      {timeframe === "week" && renderAggregatedView("week")}
-      {timeframe === "month" && renderAggregatedView("month")}
+      {renderDayView()}
     </View>
   );
 };
@@ -208,11 +162,6 @@ const styles = StyleSheet.create({
   },
   weekDay: { width: 40, textAlign: "center", fontWeight: "bold" },
   grid: { flexDirection: "row", flexWrap: "wrap" },
-  gridWeekMonth: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-  },
   dayCell: {
     width: "14.28%",
     aspectRatio: 1,
@@ -221,12 +170,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: colors.lightGray,
   },
-  weekMonthCell: {
-    width: "30%",
-    aspectRatio: 1,
+  customCell: {
+    width: "95%",
+    aspectRatio: 3,
     justifyContent: "center",
     alignItems: "center",
-    margin: "1.5%",
+    margin: "2.5%",
     borderWidth: 0.5,
     borderColor: colors.lightGray,
   },

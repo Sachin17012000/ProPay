@@ -96,8 +96,8 @@ export const formatDate = (dateString: string) =>
     year: "numeric",
   }).format(new Date(dateString));
 export const getVolatilityColor = (volatility: number) => {
-  if (volatility < 33) return colors.green;
-  if (volatility < 66) return colors.yellow;
+  if (volatility < 1.5) return colors.green;
+  if (volatility < 3) return colors.yellow;
   return colors.crimson;
 };
 export const candleToDayData = async (candle: any): Promise<DayData> => {
@@ -153,3 +153,24 @@ function getNearestRate(
   }
   return rates[nearest].INR;
 }
+export const buildCustomRangeData = (
+  startDate: string,
+  endDate: string,
+  daysData: Record<string, DayData>
+): DayData | null => {
+  const start = daysData[startDate];
+  const end = daysData[endDate];
+
+  if (!start || !end) return null;
+
+  const performance = ((end.price - start.price) / start.price) * 100;
+
+  return {
+    date: `${formatDate(startDate)} → ${formatDate(endDate)}`,
+    price: end.price,
+    start_price: start.price,
+    performance: Number(performance.toFixed(2)),
+    volatility: 0,
+    liquidity: 0,
+  };
+};

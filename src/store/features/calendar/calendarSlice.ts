@@ -14,7 +14,7 @@ interface CalendarState {
   currentYear: number;
   selectedDate: string | null;
   daysData: Record<string, DayData>;
-  timeframe: "day" | "week" | "month";
+  timeframe: "day" | "custom";
 }
 
 const initialState: CalendarState = {
@@ -42,7 +42,7 @@ const calendarSlice = createSlice({
     setDayData: (state, action: PayloadAction<DayData>) => {
       state.daysData[action.payload.date] = action.payload;
     },
-    setTimeframe: (state, action: PayloadAction<"day" | "week" | "month">) => {
+    setTimeframe: (state, action: PayloadAction<"day" | "custom">) => {
       state.timeframe = action.payload;
     },
     setBulkDayData: (state, action: PayloadAction<DayData[]>) => {

@@ -24,36 +24,11 @@ export default StyleSheet.create({
   closeBtn: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     borderRadius: 8,
     alignItems: "center",
   },
   closeBtnText: { color: "white", fontWeight: "bold" },
-  filterContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
-  filterButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: colors.ash,
-    borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  filterButtonText: {
-    color: colors.black,
-    textAlign: "center",
-  },
-  activeFilterButton: {
-    backgroundColor: colors.blue,
-    borderColor: colors.blue,
-  },
-  activeFilterButtonText: {
-    color: colors.ivory,
-  },
   timeframeContainer: {
     flexDirection: "row",
     justifyContent: "center",

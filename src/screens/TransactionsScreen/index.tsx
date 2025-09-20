@@ -9,14 +9,14 @@ import {
 import Text from "../../CommonComponent/Text";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { updateTransaction } from "../../store/features/transactions/transactionSlice";
-import { Transaction } from "../../types";
+import { FilterType, Transaction } from "../../types";
 import CategoryModal from "../../CommonComponent/CategoryModal";
 import styles from "./style";
 import colors from "../../CommonComponent/Theme/Color";
 import { formatCurrency, formatDate } from "../../utils/utils";
 import SkeletonView from "../../CommonComponent/skeletonView";
-
-type FilterType = "all" | "send" | "add";
+import FilterButtons from "../../CommonComponent/filterButtons";
+import { transactionFilters } from "../../utils/staticData";
 
 export default function TransactionsScreen() {
   const dispatch = useAppDispatch();
@@ -67,37 +67,16 @@ export default function TransactionsScreen() {
     );
   };
 
-  const renderFilterButton = (type: FilterType, label: string) => (
-    <TouchableOpacity
-      key={type}
-      style={[
-        styles.filterButton,
-        filter === type && styles.activeFilterButton,
-      ]}
-      onPress={() => setFilter(type)}
-    >
-      <Text
-        textType="baseRegular"
-        style={[
-          styles.filterButtonText,
-          filter === type && styles.activeFilterButtonText,
-        ]}
-      >
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
       <Text textType="headingBold" style={styles.title}>
         Transaction History
       </Text>
-      <View style={styles.filterContainer}>
-        {renderFilterButton("all", "All")}
-        {renderFilterButton("send", "Sent")}
-        {renderFilterButton("add", "Added")}
-      </View>
+      <FilterButtons
+        filter={filter}
+        setFilter={setFilter}
+        buttonArray={transactionFilters}
+      />
       {filteredTransactions.length === 0 ? (
         <Text textType="baseRegular" style={styles.emptyMessage}>
           No {filter} transactions found.
