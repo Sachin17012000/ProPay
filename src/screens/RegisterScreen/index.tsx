@@ -5,6 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
@@ -49,65 +50,70 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text textType="largeBold" style={styles.title}>
-        Create An Account
-      </Text>
-      <Input
-        name="name"
-        label="Full Name"
-        placeholder="Enter your full name"
-        control={control}
-        error={errors.name?.message as string}
-      />
-      <Input
-        name="email"
-        label="Email"
-        placeholder="Enter your email"
-        keyboardType="email-address"
-        control={control}
-        error={errors.email?.message as string}
-      />
-      <Input
-        name="password"
-        label="Password"
-        placeholder="Enter password"
-        secureTextEntry
-        control={control}
-        error={errors.password?.message as string}
-      />
-
-      <Input
-        name="confirmPassword"
-        label="Confirm Password"
-        placeholder="Confirm your password"
-        secureTextEntry
-        control={control}
-        error={errors.confirmPassword?.message as string}
-      />
-      <TouchableOpacity
-        onPress={handleSubmit(onSubmit)}
-        disabled={loading}
-        style={[styles.button, loading && { opacity: 0.6 }]}
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={"height"}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
       >
-        {loading ? (
-          <ActivityIndicator color={colors.ivory} />
-        ) : (
-          <Text style={styles.buttonText}>Register</Text>
-        )}
-      </TouchableOpacity>
-      <View style={styles.linkTextView}>
-        <Text textType="mediumSemiBold">Already have an account?</Text>
+        <Text textType="largeBold" style={styles.title}>
+          Create An Account
+        </Text>
+        <Input
+          name="name"
+          label="Full Name"
+          placeholder="Enter your full name"
+          control={control}
+          error={errors.name?.message as string}
+        />
+        <Input
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          control={control}
+          error={errors.email?.message as string}
+        />
+        <Input
+          name="password"
+          label="Password"
+          placeholder="Enter password"
+          secureTextEntry
+          control={control}
+          error={errors.password?.message as string}
+        />
+
+        <Input
+          name="confirmPassword"
+          label="Confirm Password"
+          placeholder="Confirm your password"
+          secureTextEntry
+          control={control}
+          error={errors.confirmPassword?.message as string}
+        />
         <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
+          onPress={handleSubmit(onSubmit)}
+          disabled={loading}
+          style={[styles.button, loading && { opacity: 0.6 }]}
         >
-          <Text textType="mediumSemiBold" style={styles.loginButton}>
-            LogIn
-          </Text>
+          {loading ? (
+            <ActivityIndicator color={colors.ivory} />
+          ) : (
+            <Text style={styles.buttonText}>Register</Text>
+          )}
         </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.linkTextView}>
+          <Text textType="mediumSemiBold">Already have an account?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <Text textType="mediumSemiBold" style={styles.loginButton}>
+              LogIn
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

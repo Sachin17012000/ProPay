@@ -2,7 +2,12 @@ import { StyleSheet } from "react-native";
 import colors from "../../CommonComponent/Theme/Color";
 
 export default StyleSheet.create({
-  container: { flex: 1, paddingTop: 40, paddingHorizontal: 10 },
+  container: {
+    flex: 1,
+    paddingTop: 40,
+    paddingHorizontal: 10,
+    backgroundColor: colors.ivory,
+  },
   title: {
     textAlign: "center",
     marginBottom: 10,

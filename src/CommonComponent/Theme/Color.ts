@@ -50,6 +50,7 @@ const colors = {
   mint: "#cce5ff",
   greyMint: "#99ccff",
   yellow: "#ffe680",
+  greyish: "#f5f5f5",
 };
 
 export default colors;

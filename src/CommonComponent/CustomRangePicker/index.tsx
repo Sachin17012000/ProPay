@@ -116,8 +116,15 @@ const styles = StyleSheet.create({
   dateBtn: {
     padding: 10,
     borderWidth: 1,
-    borderRadius: 6,
     marginBottom: 8,
+    backgroundColor: colors.greyish,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    shadowColor: colors.lightShadowBlack,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   showBtn: {
     paddingVertical: 12,
