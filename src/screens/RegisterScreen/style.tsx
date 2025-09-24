@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    paddingTop: 100,
     backgroundColor: colors.white,
   },
   title: {
@@ -31,6 +30,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: colors.royalBlue,
   },
+  imageStyle: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: -50,
+  },
+  imageView: { alignItems: "center" },
 });
 
 export default styles;

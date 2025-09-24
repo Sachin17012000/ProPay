@@ -1,6 +1,6 @@
 import { Animated, RefreshControl } from "react-native";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Image } from "react-native";
 import Text from "../../CommonComponent/Text";
 import styles from "./style";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -11,6 +11,7 @@ import { FeatureButton } from "../../CommonComponent/FeatureButton";
 import colors from "../../CommonComponent/Theme/Color";
 import { formatCurrency, formatDate } from "../../utils/utils";
 import HomeScreenTransactions from "../../CommonComponent/HomeScreenTransactions";
+import ProPayLogo from "../../../assets/ProPayLogo.png";
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
@@ -62,6 +63,9 @@ export default function HomeScreen() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+      <View style={styles.imageView}>
+        <Image source={ProPayLogo} style={styles.imageStyle} />
+      </View>
       <Text
         textType="baseMediumBold"
         style={styles.greeting}

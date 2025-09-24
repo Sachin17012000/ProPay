@@ -5,7 +5,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 280,
+    justifyContent: "center",
     backgroundColor: colors.white,
   },
   headingStyle: {
@@ -56,5 +56,12 @@ const style = StyleSheet.create({
   passwordText: {
     color: colors.granite,
   },
+  imageStyle: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: -50,
+  },
+  imageView: { alignItems: "center" },
 });
 export default style;

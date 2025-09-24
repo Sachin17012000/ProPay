@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  Image,
+} from "react-native";
 import Text from "../../CommonComponent/Text";
 import Input from "../../CommonComponent/Input";
 import { useForm } from "react-hook-form";
@@ -9,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { loginSchema } from "./validations";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { loginThunk } from "../../store/features/user/userThunk";
+import ProPayLogo from "../../../assets/ProPayLogo.png";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
@@ -37,6 +44,9 @@ const LoginScreen = ({ navigation }) => {
   );
   return (
     <View style={styles.container}>
+      <View style={styles.imageView}>
+        <Image source={ProPayLogo} style={styles.imageStyle} />
+      </View>
       <Text textType="largeBold" style={styles.title}>
         Welcome To the Pro Pay App
       </Text>

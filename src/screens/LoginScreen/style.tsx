@@ -27,6 +27,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.ivory,
   },
+  imageStyle: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: -50,
+  },
+  imageView: { alignItems: "center" },
 });
 
 export default styles;

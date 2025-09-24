@@ -3,13 +3,20 @@ import Input from "../../CommonComponent/Input";
 import Text from "../../CommonComponent/Text";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { forgotPasswordSchema } from "./validation";
-import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import style from "./style";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { forgotPasswordThunk } from "../../store/features/user/userThunk";
 import { clearRetrievedPassword } from "../../store/features/user/userSlice";
 import colors from "../../CommonComponent/Theme/Color";
+import ProPayLogo from "../../../assets/ProPayLogo.png";
 
 type ForgotPasswordFormValues = {
   email: string;
@@ -57,6 +64,9 @@ const ForgotPassword = () => {
 
   return (
     <View style={style.container}>
+      <View style={style.imageView}>
+        <Image source={ProPayLogo} style={style.imageStyle} />
+      </View>
       <Text textType="largeBold" style={style.headingStyle}>
         Forgot Password
       </Text>

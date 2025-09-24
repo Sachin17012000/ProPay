@@ -38,6 +38,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 20,
   },
+  imageStyle: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: -50,
+    marginTop: -60,
+  },
+  imageView: {
+    alignItems: "center",
+  },
 });
 
 export default styles;

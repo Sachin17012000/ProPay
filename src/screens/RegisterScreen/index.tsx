@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
+  Image,
 } from "react-native";
 import styles from "./style";
 import Text from "../../CommonComponent/Text";
@@ -18,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { registerThunk } from "../../store/features/user/userThunk";
 import { RegisterFormData } from "../../types";
 import colors from "../../CommonComponent/Theme/Color";
+import ProPayLogo from "../../../assets/ProPayLogo.png";
 
 export default function RegisterScreen() {
   const dispatch = useAppDispatch();
@@ -55,6 +57,9 @@ export default function RegisterScreen() {
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.imageView}>
+          <Image source={ProPayLogo} style={styles.imageStyle} />
+        </View>
         <Text textType="largeBold" style={styles.title}>
           Create An Account
         </Text>
