@@ -79,7 +79,12 @@ export default function Input({
         )}
       />
       {error && (
-        <Text textType="smallRegular" style={styles.error}>
+        <Text
+          textType="smallRegular"
+          style={styles.error}
+          accessibilityLiveRegion="assertive"
+          accessible={true}
+        >
           {error}
         </Text>
       )}

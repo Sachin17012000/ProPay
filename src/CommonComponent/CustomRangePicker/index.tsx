@@ -49,7 +49,11 @@ const CustomRangePicker = ({
 
   return (
     <View style={styles.container}>
-      <Text textType="mediumBold" style={styles.title}>
+      <Text
+        textType="mediumBold"
+        style={styles.title}
+        accessibilityRole="header"
+      >
         Select Custom Range
       </Text>
 
@@ -103,7 +107,15 @@ const CustomRangePicker = ({
         </TouchableOpacity>
       )}
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && (
+        <Text
+          accessibilityLiveRegion="polite"
+          style={styles.error}
+          accessible={true}
+        >
+          {error}
+        </Text>
+      )}
     </View>
   );
 };

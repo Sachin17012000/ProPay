@@ -19,7 +19,11 @@ export default function ExpenseTransactions({
 }: ExpenseTransactionsProps) {
   return (
     <>
-      <Text textType="mediumSemiBold" style={styles.transactionTitle}>
+      <Text
+        textType="mediumSemiBold"
+        style={styles.transactionTitle}
+        accessibilityRole="header"
+      >
         Recent Transactions
       </Text>
       {loading ? (
@@ -34,6 +38,7 @@ export default function ExpenseTransactions({
             name="file-document-outline"
             size={50}
             color={colors.ash}
+            importantForAccessibility="no"
           />
           <Text textType="baseRegular" style={styles.emptyText}>
             No transactions yet. Tap + to add one!

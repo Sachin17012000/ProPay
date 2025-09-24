@@ -86,6 +86,7 @@ export const AddExpenseModal: React.FC<Props> = ({
       animationType="slide"
       transparent
       onRequestClose={onClose}
+      accessibilityViewIsModal={true}
     >
       <TouchableWithoutFeedback
         onPress={() => {
@@ -94,7 +95,10 @@ export const AddExpenseModal: React.FC<Props> = ({
         }}
       >
         <View style={styles.overlay}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
             <View style={styles.container}>
               <Text textType="largeBold" style={styles.header}>
                 Add Expense
@@ -106,6 +110,9 @@ export const AddExpenseModal: React.FC<Props> = ({
                     styles.switchBtn,
                     form.type === "send" && styles.active,
                   ]}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: form.type === "send" }}
+                  accessibilityLabel="Mark expense as Spent"
                 >
                   <Text
                     style={
@@ -123,6 +130,9 @@ export const AddExpenseModal: React.FC<Props> = ({
                     styles.switchBtn,
                     form.type === "add" && styles.active,
                   ]}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: form.type === "add" }}
+                  accessibilityLabel="Mark expense as Added"
                 >
                   <Text
                     style={
@@ -141,6 +151,8 @@ export const AddExpenseModal: React.FC<Props> = ({
                 style={styles.input}
                 value={form.amount}
                 onChangeText={(amount) => updateForm("amount", amount)}
+                accessibilityLabel="Enter amount"
+                accessibilityHint="Input the expense amount in numbers"
               />
               {form.type === "send" && (
                 <TextInput
@@ -148,6 +160,8 @@ export const AddExpenseModal: React.FC<Props> = ({
                   style={styles.input}
                   value={form.to}
                   onChangeText={(to) => updateForm("to", to)}
+                  accessibilityLabel="Recipient name"
+                  accessibilityHint="Input the Recipient name"
                 />
               )}
               {form.type === "add" && (
@@ -156,6 +170,8 @@ export const AddExpenseModal: React.FC<Props> = ({
                   style={styles.input}
                   value={form.from}
                   onChangeText={(from) => updateForm("from", from)}
+                  accessibilityLabel="Sender name"
+                  accessibilityHint="Input the Sender name"
                 />
               )}
               <TextInput
@@ -163,8 +179,15 @@ export const AddExpenseModal: React.FC<Props> = ({
                 style={styles.input}
                 value={form.note}
                 onChangeText={(note) => updateForm("note", note)}
+                accessibilityLabel="Additional note"
+                accessibilityHint="Input the Additional note"
               />
-              <Text textType="semiRegular" style={styles.label}>
+              <Text
+                textType="semiRegular"
+                style={styles.label}
+                accessibilityRole="header"
+                importantForAccessibility="no"
+              >
                 Select Category
               </Text>
               <FlatList
@@ -179,6 +202,9 @@ export const AddExpenseModal: React.FC<Props> = ({
                       form.category === cat && styles.selectedCategoryChip,
                     ]}
                     onPress={() => updateForm("category", cat)}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: form.category === cat }}
+                    accessibilityLabel={`Category ${cat}`}
                   >
                     <MaterialCommunityIcons
                       name="tag-outline"
@@ -186,6 +212,7 @@ export const AddExpenseModal: React.FC<Props> = ({
                       color={
                         form.category === cat ? colors.ivory : colors.granite
                       }
+                      accessibilityElementsHidden
                     />
                     <Text
                       textType="semiRegular"
@@ -201,7 +228,11 @@ export const AddExpenseModal: React.FC<Props> = ({
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingVertical: 4 }}
               />
-              <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                accessibilityRole="button"
+                accessibilityLabel={`Select date. Currently ${form.date.toDateString()}`}
+              >
                 <Text textType="baseRegular" style={styles.dateText}>
                   📅 {form.date.toDateString()}
                 </Text>
@@ -218,10 +249,20 @@ export const AddExpenseModal: React.FC<Props> = ({
                 />
               )}
               <View style={styles.buttonRow}>
-                <TouchableOpacity onPress={onClose} style={styles.cancel}>
+                <TouchableOpacity
+                  onPress={onClose}
+                  style={styles.cancel}
+                  accessibilityRole="button"
+                  accessibilityLabel="Cancel and close the modal"
+                >
                   <Text style={styles.cancelText}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSave} style={styles.save}>
+                <TouchableOpacity
+                  onPress={handleSave}
+                  style={styles.save}
+                  accessibilityRole="button"
+                  accessibilityLabel="Save this expense"
+                >
                   <Text textType="baseRegularBold" style={styles.saveText}>
                     Save
                   </Text>

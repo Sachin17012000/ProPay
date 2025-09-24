@@ -49,17 +49,32 @@ export default function BudgetModal({
       transparent
       animationType="fade"
       onRequestClose={onClose}
+      accessibilityViewIsModal={true}
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
             <View style={styles.modalContent}>
-              <Text textType="headingBold" style={styles.marginBottom15}>
+              <Text
+                textType="headingBold"
+                style={styles.marginBottom15}
+                accessibilityRole="header"
+              >
                 Set Budgets
               </Text>
               {budgetArray.map((period) => (
                 <View key={period} style={styles.marginBottom10}>
-                  <Text textType="baseRegularBold" style={styles.marginBottom5}>
+                  <Text
+                    textType="baseRegularBold"
+                    style={styles.marginBottom5}
+                    accessibilityRole="text"
+                    accessibilityElementsHidden
+                    accessible={false}
+                    importantForAccessibility="no"
+                  >
                     {period} Budget
                   </Text>
                   <TextInput
@@ -68,6 +83,8 @@ export default function BudgetModal({
                     value={budgets[period]}
                     onChangeText={(text) => handleInputChange(period, text)}
                     style={styles.input}
+                    accessibilityLabel={`${period} budget amount`}
+                    accessibilityHint={`Enter the ${period.toLowerCase()} budget in numbers`}
                   />
                 </View>
               ))}

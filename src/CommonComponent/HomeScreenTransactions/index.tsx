@@ -20,7 +20,7 @@ export default function HomeScreenTransactions({
   const navigation = useAppNavigation();
 
   const renderTransaction = ({ item }: any) => (
-    <View style={styles.transactionCard}>
+    <View style={styles.transactionCard} accessible={true}>
       <View style={styles.rowBetween}>
         <Text textType="baseRegular" style={styles.transactionName}>
           {item.type === "send"

@@ -32,8 +32,14 @@ export default function ExpenseDetails({
           name="chart-bar"
           size={18}
           style={styles.chartBarIconStyle}
+          accessibilityElementsHidden
+          importantForAccessibility="no"
         />
-        <Text textType="baseRegular" style={styles.title}>
+        <Text
+          textType="baseRegular"
+          style={styles.title}
+          accessibilityRole="header"
+        >
           This {getToggleTitle(activeTab)}
         </Text>
       </View>

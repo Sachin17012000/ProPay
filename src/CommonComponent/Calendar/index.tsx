@@ -65,7 +65,7 @@ const Calendar = ({
     <>
       <View style={styles.weekRow}>
         {daysOfWeek.map((day) => (
-          <Text key={day} style={styles.weekDay}>
+          <Text key={day} style={styles.weekDay} importantForAccessibility="no">
             {day}
           </Text>
         ))}
@@ -105,6 +105,13 @@ const Calendar = ({
                 isSelected && styles.selectedCell,
                 !dayData && { opacity: 0.3 },
               ]}
+              accessible={!!dayData}
+              accessibilityLabel={`${date.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}${isToday ? ", today" : ""}${isSelected ? ", selected" : ""}`}
               onPress={() => dayData && handleSelectKey(dateStr)}
             >
               <Text textType="semiRegular">{date.getDate()}</Text>
@@ -123,7 +130,10 @@ const Calendar = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handlePrevMonth}>
+        <TouchableOpacity
+          onPress={handlePrevMonth}
+          accessibilityLabel="Previous month"
+        >
           <Text textType="baseMedium" style={styles.navBtn}>
             {"<"}
           </Text>
@@ -132,7 +142,10 @@ const Calendar = ({
           {firstDayOfMonth.toLocaleString("default", { month: "long" })}{" "}
           {currentYear}
         </Text>
-        <TouchableOpacity onPress={handleNextMonth}>
+        <TouchableOpacity
+          onPress={handleNextMonth}
+          accessibilityLabel="Next month"
+        >
           <Text textType="baseMedium" style={styles.navBtn}>
             {">"}
           </Text>
