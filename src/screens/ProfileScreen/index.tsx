@@ -52,7 +52,11 @@ export default function ProfileScreen() {
           Profile
         </Text>
         <View style={styles.profileCircle}>
-          <Text textType="largeBold" style={styles.initials}>
+          <Text
+            textType="largeBold"
+            style={styles.initials}
+            importantForAccessibility="no"
+          >
             {getInitials(user)}
           </Text>
         </View>

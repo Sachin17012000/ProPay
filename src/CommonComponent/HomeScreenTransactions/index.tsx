@@ -88,6 +88,7 @@ export default function HomeScreenTransactions({
                 <Text
                   textType="baseRegularBold"
                   style={styles.viewAllButtonText}
+                  accessibilityLabel="View All Transactions"
                 >
                   View All Transactions →
                 </Text>

@@ -62,7 +62,11 @@ export default function HomeScreen() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <Text textType="baseMediumBold" style={styles.greeting}>
+      <Text
+        textType="baseMediumBold"
+        style={styles.greeting}
+        accessibilityLabel={`Welcome back, ${user.name}`}
+      >
         Welcome back, {user.name} 👋
       </Text>
       <Animated.View
@@ -80,6 +84,7 @@ export default function HomeScreen() {
             ],
           },
         ]}
+        accessible
       >
         <LinearGradient
           colors={[colors.steelBlue, colors.emerald]}

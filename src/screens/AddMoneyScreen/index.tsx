@@ -9,7 +9,7 @@ import Text from "../../CommonComponent/Text";
 import uuid from "react-native-uuid";
 import styles from "./style";
 import Input from "../../CommonComponent/Input";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -20,6 +20,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { createTransaction } from "../../store/features/transactions/transactionThunk";
 import colors from "../../CommonComponent/Theme/Color";
 import { formatCurrency } from "../../utils/utils";
+import { InferType } from "yup";
 
 const schema = yup.object().shape({
   amount: yup
@@ -29,9 +30,7 @@ const schema = yup.object().shape({
     .required("Amount is required"),
 });
 
-type FormData = {
-  amount: number;
-};
+type FormData = InferType<typeof schema>;
 
 export default function AddMoneyScreen() {
   const dispatch = useAppDispatch();
@@ -46,7 +45,7 @@ export default function AddMoneyScreen() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     if (!user) {
       Toast.show({
         type: "error",
@@ -97,10 +96,18 @@ export default function AddMoneyScreen() {
         loading && { opacity: 0.6, pointerEvents: "none" },
       ]}
     >
-      <Text textType="headingBold" style={styles.title}>
+      <Text
+        textType="headingBold"
+        style={styles.title}
+        accessibilityRole="header"
+      >
         Add Money
       </Text>
-      <Text textType="baseRegularBold" style={styles.balanceLabel}>
+      <Text
+        textType="baseRegularBold"
+        style={styles.balanceLabel}
+        accessibilityRole="text"
+      >
         Wallet Balance: {formatCurrency(user.balance)}
       </Text>
       <Input
@@ -110,7 +117,7 @@ export default function AddMoneyScreen() {
         control={control}
         error={errors.amount?.message}
       />
-      <View style={styles.paymentMethodBox}>
+      <View style={styles.paymentMethodBox} accessible>
         <Text textType="baseRegular">Pay via:</Text>
         <Text textType="baseMediumBold">Wallet Balance</Text>
       </View>

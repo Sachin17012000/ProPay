@@ -133,7 +133,11 @@ export default function ExpenseTracker() {
         }
       >
         <View style={styles.headerView}>
-          <Text textType="mediumSemiBold" style={styles.title}>
+          <Text
+            textType="mediumSemiBold"
+            style={styles.title}
+            accessibilityRole="header"
+          >
             Expense Tracker
           </Text>
         </View>

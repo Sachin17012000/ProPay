@@ -67,6 +67,10 @@ export default function Input({
               <TouchableOpacity
                 onPress={() => setShowPassword((prev) => !prev)}
                 style={styles.iconWrapper}
+                accessibilityLabel={
+                  showPassword ? "Hide password" : "Show password"
+                }
+                accessibilityRole="button"
               >
                 <Icon
                   name={showPassword ? "eye" : "eye-off"}
