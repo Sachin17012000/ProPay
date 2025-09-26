@@ -29,6 +29,18 @@
     "plugins": [
       "expo-asset",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "aa1e3ebc-ffdb-4b7d-9b65-dc3ccde34343"
+      }
+    },
+    "owner": "sachin17",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/aa1e3ebc-ffdb-4b7d-9b65-dc3ccde34343"
+    }
   }
 }
