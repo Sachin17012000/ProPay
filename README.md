@@ -32,16 +32,37 @@
 - **Other:** Accessibility features implemented  
 
 ---
+## Demo / Expo Link
+
+Try the app on your phone via **Expo Go**:
+
+[Open ProPay Wallet App](https://expo.dev/accounts/sachin17/projects/propay/updates/12b195f2-0328-4718-af81-1955499d52db)
+
+
+---
+## Demo Video
+
+
+https://github.com/user-attachments/assets/52a85240-cfff-488f-b9c8-34fcfcd2d166
+
+
+---
 
 ## Screenshots
 
-![Login Screen](screenshots/Login.jpg)  
-![Home Screen](screenshots/Home.jpg)  
-![Expense Tracker](screenshots/ExpenseTracker.jpg)  
-![Market Trends](screenshots/Market.jpg)  
-![Profile Page](screenshots/Profile.jpg)
-![Register Page](screenshots/Register.jpg)
-![Add expense Page](screenshots/AddExpense.jpg)  
-![Transaction History Page](screenshots/TransactionHistory.jpg)
-![Send money Page](screenshots/SendMoney.jpg)
-![Add Money Page](screenshots/AddMoney.jpg)
+| Login | Home | Expense Tracker |
+|-------|------|-----------------|
+| <img src="Screenshots/Login.jpg" width="220"/> | <img src="Screenshots/Home.jpg" width="220"/> | <img src="Screenshots/ExpenseTracker.jpg" width="220"/> |
+
+| Market Trends | Profile | Register |
+|---------------|---------|----------|
+| <img src="Screenshots/Market.jpg" width="220"/> | <img src="Screenshots/Profile.jpg" width="220"/> | <img src="Screenshots/Register.jpg" width="220"/> |
+
+| Add Expense | Transactions | Send Money |
+|-------------|--------------|------------|
+| <img src="Screenshots/AddExpense.jpg" width="220"/> | <img src="Screenshots/TransactionHistory.jpg" width="220"/> | <img src="Screenshots/SendMoney.jpg" width="220"/> |
+
+| Add Money |
+|-----------|
+| <img src="Screenshots/AddMoney.jpg" width="220"/> |
+
