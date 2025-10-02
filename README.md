@@ -36,7 +36,7 @@
 
 Try the app on your phone via **Expo Go**:
 
-[Open ProPay Wallet App](https://expo.dev/accounts/sachin17/projects/propay/updates/12b195f2-0328-4718-af81-1955499d52db)
+[Open ProPay Wallet App](https://expo.dev/accounts/sachin17/projects/propay/branches/main)
 
 
 ---
