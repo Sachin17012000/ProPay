@@ -20,6 +20,7 @@ import { registerThunk } from "../../store/features/user/userThunk";
 import { RegisterFormData } from "../../types";
 import colors from "../../CommonComponent/Theme/Color";
 import ProPayLogo from "../../../assets/ProPayLogo.png";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function RegisterScreen() {
   const dispatch = useAppDispatch();
@@ -52,11 +53,13 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={"height"}>
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-      >
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.scrollViewStyle}
+      enableOnAndroid={true}
+      extraScrollHeight={20}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
         <View style={styles.imageView}>
           <Image source={ProPayLogo} style={styles.imageStyle} />
         </View>
@@ -118,7 +121,7 @@ export default function RegisterScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }

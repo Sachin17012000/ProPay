@@ -17,9 +17,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { loginThunk } from "../../store/features/user/userThunk";
 import ProPayLogo from "../../../assets/ProPayLogo.png";
 
+// 👇 import KeyboardAwareScrollView
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const LoginScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
-
   const { loading } = useAppSelector((state) => state.user);
 
   const {
@@ -32,6 +34,7 @@ const LoginScreen = ({ navigation }) => {
   const onSubmit = async (data) => {
     const result = await dispatch(loginThunk(data));
     if (loginThunk.fulfilled.match(result)) {
+      // Navigate or show success
     } else {
       Alert.alert("Login Failed", result.payload || "Invalid login");
     }
@@ -42,60 +45,64 @@ const LoginScreen = ({ navigation }) => {
       reset();
     }, [])
   );
+
   return (
-    <View style={styles.container}>
-      <View style={styles.imageView}>
-        <Image source={ProPayLogo} style={styles.imageStyle} />
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.scrollViewStyle}
+      enableOnAndroid={true}
+      extraScrollHeight={20}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
+        <View style={styles.imageView}>
+          <Image source={ProPayLogo} style={styles.imageStyle} />
+        </View>
+        <Text textType="largeBold" style={styles.title}>
+          Welcome To the Pro Pay App
+        </Text>
+
+        <Input
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          control={control}
+          error={errors.email?.message as string}
+        />
+        <Input
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+          secureTextEntry
+          control={control}
+          error={errors.password?.message as string}
+        />
+
+        <TouchableOpacity
+          disabled={loading}
+          style={[styles.button, loading && { opacity: 0.6 }]}
+          onPress={handleSubmit(onSubmit)}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Login</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text textType="mediumSemiBold" style={styles.registerLink}>
+            Don’t have an account? Register
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+          <Text textType="mediumSemiBold" style={styles.registerLink}>
+            Forgot Password
+          </Text>
+        </TouchableOpacity>
       </View>
-      <Text textType="largeBold" style={styles.title}>
-        Welcome To the Pro Pay App
-      </Text>
-      <Input
-        name="email"
-        label="Email"
-        placeholder="Enter your email"
-        keyboardType="email-address"
-        control={control}
-        error={errors.email?.message as string}
-      />
-      <Input
-        name="password"
-        label="Password"
-        placeholder="Enter your password"
-        secureTextEntry
-        control={control}
-        error={errors.password?.message as string}
-      />
-      <TouchableOpacity
-        disabled={loading}
-        style={[styles.button, loading && { opacity: 0.6 }]}
-        onPress={handleSubmit(onSubmit)}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Login</Text>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Register");
-        }}
-      >
-        <Text textType="mediumSemiBold" style={styles.registerLink}>
-          Don’t have an account? Register
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("ForgotPassword");
-        }}
-      >
-        <Text textType="mediumSemiBold" style={styles.registerLink}>
-          Forgot Password
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
